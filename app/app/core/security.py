@@ -1,2 +1,3 @@
 import secrets
-print "security"
+
+print("security")
