@@ -1,2 +1,1 @@
-
-print ("This is Lenovo")
+print("This is product")
