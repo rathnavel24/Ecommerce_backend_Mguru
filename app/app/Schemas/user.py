@@ -1,1 +1,1 @@
-schemas file
+print("This is Scheme DB")
