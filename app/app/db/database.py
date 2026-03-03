@@ -1,1 +1,1 @@
-database file
+print("This is database")
