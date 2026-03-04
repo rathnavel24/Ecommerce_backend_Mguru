@@ -14,3 +14,5 @@ class EcommerceInventory(Base):
     created_at = Column(TIMESTAMP,default=func.now())
     updated_at = Column(TIMESTAMP,default=func.mow())
     created_by = Column(String(100))
+
+    product_inv = relationship("EcommerceProductInfo", back_populates="itemsinventory")
