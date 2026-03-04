@@ -15,5 +15,7 @@ class Users(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now())
     created_by = Column(String(100))
+
+    
     
 
