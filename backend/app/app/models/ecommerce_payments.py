@@ -4,17 +4,22 @@ from sqlalchemy.orm import relationship
 
 class EcommercePayments(Base):
     __tablename__ = 'payments'
-    payment_id = Column(Integer,primary_key=True,index=True)
-    order_id = Column(Integer, ForeignKey="order.order_id")
-    user_id  = Column(Integer, ForeignKey="User.user_id")
+
+    payment_id = Column(Integer, primary_key=True)
+
+    order_id = Column(Integer, ForeignKey("orders.order_id"))
+    user_id  = Column(Integer, ForeignKey("users.user_id"))
+
     transaction_id = Column(String(100))
     payment_gateway = Column(String(100))
     amount = Column(DECIMAL(10,2))
+
     payment_method = Column(String(50))
     payment_status = Column(Enum('pending','success','failed','refunded'))
-    paid_at = Column(TIMESTAMP,default=func.now())
-    created_at = Column(TIMESTAMP,default = func.now())
 
+    paid_at = Column(TIMESTAMP, default=func.now())
+    created_at = Column(TIMESTAMP, default=func.now())
 
-    userpay = relationship("EcommerceOrder", back_populates="userorder")
+    order = relationship("EcommerceOrder", back_populates="payment")
+    user = relationship("Users", back_populates="payments")
     

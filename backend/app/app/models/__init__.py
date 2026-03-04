@@ -5,12 +5,8 @@ from .ecommerce_inventory import *
 from .ecommerce_order import *
 from .ecommerce_orderitems import *
 from .ecommerce_payments import *
-from .ecommerce_permissions import *
 from .ecommerce_productinfo import *
-from .ecommerce_rolepermission import *
-from .ecommerce_roles import *
 from .ecommerce_token import *
-from .ecommerce_user_role import *
 from .ecommerce_user import *
 from .ecommerce_userotp import *
 

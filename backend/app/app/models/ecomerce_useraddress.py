@@ -6,7 +6,8 @@ class EcommerceUserAddress(Base):
     __tablename__ = 'user_address'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer,ForeignKey("User.user_id"))
+    user_id = Column(Integer, ForeignKey("users.user_id"))
+
     address_line1 = Column(TEXT)
     address_line2 = Column(TEXT)
     city = Column(String(50))
@@ -15,10 +16,5 @@ class EcommerceUserAddress(Base):
     pincode = Column(String(10))
     isdefault = Column(Boolean)
 
-    useraddress = relationship("Users", back_populates="user_address")
-    address_user = relationship("EcommerceOrder", back_populates="useraddress")
-
-
-
-
-    
+    user = relationship("Users", back_populates="addresses")
+    orders = relationship("EcommerceOrder", back_populates="address")
