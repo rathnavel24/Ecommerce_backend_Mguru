@@ -12,4 +12,4 @@ class EcommerceToken(Base):
     expiresat = Column(TIMESTAMP, default=func.now()+timedelta(minutes=5))
     created_at = Column(TIMESTAMP, default=func.now())
 
-    user = relationship("ecommerce_user", back_populates="token")
+    usertoken = relationship("Users", back_populates="user_token")

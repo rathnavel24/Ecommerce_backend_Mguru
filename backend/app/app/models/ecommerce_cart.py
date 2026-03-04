@@ -14,3 +14,7 @@ class EcommerceCart(Base):
     update_at = Column(TIMESTAMP, default=func.now())
     created_by = Column(String(100))
 
+    ecom_cart = relationship("EcommerceUser", back_populates="cart")
+    product_cart = relationship("EcommerceProductInfo", back_populates="itemscart")
+
+

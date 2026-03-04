@@ -5,10 +5,13 @@ from sqlalchemy.orm import relationship
 class EcommerceCategories(Base):
     __tablename__ = 'categories'
 
-    categories_id = Column(Integer,ForeignKey("product_info.categorie_id"),primary_key=True)
+    categories_id = Column(Integer, primary_key=True)
     name = Column(String(255))
     parent_id = Column(Integer,ForeignKey("categories.categories_id"))
     status = Column(Enum("active","inactive","deleted"))
     created_at = Column(TIMESTAMP,default=func.now())
     updated_at = Column(TIMESTAMP, default=func.now())
     created_by = Column(String(100))
+
+    ecom_cat = relationship("EcommerceProductInfo", back_populates="cat")
+    parent = relationship("EcommerceCatgories", remote_side=[id], backref="childern")

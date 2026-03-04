@@ -6,7 +6,7 @@ class EcommerceProductInfo(Base):
     __tablename__ = 'product_info'
     product_id = Column(Integer,primary_key=True)
     product_name = Column(String(255))
-    categorie_id = Column(Integer)
+    categorie_id = Column(Integer, ForeignKey="categories.categories_id")
     price  = Column(DECIMAL(10,2))
     discount_percent = Column(DECIMAL(10,2))
     description = Column(TEXT)
@@ -16,3 +16,8 @@ class EcommerceProductInfo(Base):
     createdat = Column(TIMESTAMP,default= func.now())
     updatedat = Column(TIMESTAMP,default=None,onupdate=func.now())
     createdby = Column(String(50),default='ADMIN')
+
+    cat = relationship("EcommerceCategories", back_populates="ecom_cat")
+    product_items = relationship("EcommerceOrderItems", back_populates="userproduct")
+    itemsinventory = relationship("EcommerceInventory", back_populates="product_inv")
+    itmescart = relationship("EcommerceCart", back_populates="product_cart")

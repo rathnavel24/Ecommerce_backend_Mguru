@@ -11,4 +11,4 @@ class EcommerceUserOtp(Base):
     expires_at = Column(TIMESTAMP, default=func.now())
     is_used = Column(Boolean)
 
-    user = relationship("User", back_populates="ecomuser1")
+    userotp = relationship("Users", back_populates="user_otp")
