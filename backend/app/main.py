@@ -1,12 +1,6 @@
-from app.app.db.init_db import init_db
 from fastapi import FastAPI
+from app.app.api.endpoints import login
 
 app = FastAPI()
 
-
-@app.get("/")
-async def test():
-    
-    return "Success"
-
-init_db()
+app.include_router(login.router)

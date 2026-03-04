@@ -1,5 +1,7 @@
 from pydantic import BaseModel,EmailStr
-class userlogin(BaseModel):
+from typing import Optional
 
-    email : EmailStr
-    passw : str
+class UserLogin(BaseModel):
+    username : Optional[str] = None
+    email : Optional[EmailStr] = None
+    password : str
