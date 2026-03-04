@@ -1,12 +1,8 @@
 from app.app.db.base import Base
-from sqlalchemy import Column, String, TEXT, SmallInteger, TIMESTAMP, Integer, Boolean, func, ForeignKey
-from sqlalchemy.orm import relationship
-
-from app.app.db.base import Base
 from sqlalchemy import Column, Integer, Boolean, TIMESTAMP, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-
+from datetime import timedelta
 class EcommerceUserOtp(Base):
     __tablename__ = "user_otp"
 
@@ -16,7 +12,7 @@ class EcommerceUserOtp(Base):
 
     otp = Column(Integer)
 
-    expires_at = Column(TIMESTAMP, default=func.now())
+    expires_at = Column(TIMESTAMP)
 
     is_used = Column(Boolean, default=False)
 

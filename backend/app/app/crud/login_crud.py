@@ -38,9 +38,7 @@ class LoginDetails(LoginAbstract):
             )
 
         if user.is2FA:
-            otp = OtpSent(user.email)
-            return {"msg": "OTP sent",
-                    "email": user.email}
+            return OtpSent(self.db, user)
 
         verify_user_password = verify_password(
             self.user_data.password,
