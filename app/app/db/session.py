@@ -13,4 +13,3 @@ engine = create_engine(
 )
 
 sessionLocal = sessionmaker(bind=engine)
-
