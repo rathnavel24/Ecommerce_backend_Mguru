@@ -8,5 +8,9 @@ argon2-cffi>=23.1.0
 pydantic>=2.6
 requests>=2.31
 XlsxWriter>=3.2
+<<<<<<< HEAD
 python-multipart>=0.0.9
 pymysql>=1.1.0
+=======
+python-multipart>=0.0.9
+>>>>>>> 78aa26e (update koushi)
