@@ -1,1 +1,1 @@
-print("This is a diff product")
+print("This is a product")
