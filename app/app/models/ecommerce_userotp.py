@@ -3,4 +3,4 @@ from sqlalchemy import Column,String,TEXT,SmallInteger,TIMESTAMP,Integer,Boolean
 from sqlalchemy.orm import relationship
 
 class EcommerceUserOtp(Base):
-    __tablename__ = 'user_otp'
+    __tablename__ = 'user_otp123'
