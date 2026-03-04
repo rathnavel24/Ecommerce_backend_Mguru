@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 class EcommerceCategories(Base):
     __tablename__ = 'categories'
 
-    categories_id = Column(Integer,ForeignKey("product_info.categorie_id"))
+    categories_id = Column(Integer,ForeignKey("product_info.categorie_id"),primary_key=True)
     name = Column(String(255))
     parent_id = Column(Integer,ForeignKey("categories.categories_id"))
     status = Column(Enum("active","inactive","deleted"))

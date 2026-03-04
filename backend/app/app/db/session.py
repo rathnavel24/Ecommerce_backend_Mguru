@@ -1,3 +1,4 @@
+import certifi
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -7,7 +8,7 @@ engine = create_engine(
     conn,
     connect_args={
         "ssl": {
-            "ca": "/etc/ssl/cert.pem"
+            "ca": certifi.where()
         }
     }
 )
