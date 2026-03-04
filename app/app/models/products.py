@@ -1,2 +1,1 @@
-
-print ("This is Lenovo branch")
+print("This is product")
