@@ -12,10 +12,10 @@ class Users(Base):
     password = Column(String(255))
     type = Column(String(100))
     is2FA = Column(Boolean, default=False)
-    status = Column(Enum("active", "inactive", "deleted"))
+    status = Column(Enum("active", "inactive", "deleted"),default="active")
     created_at = Column(TIMESTAMP, default=func.now())
     updated_at = Column(TIMESTAMP, default=func.now())
-    created_by = Column(String(100))
+    created_by = Column(String(100),default = "ADMIN")
 
     user_otp = relationship("EcommerceUserOtp", back_populates="user")
     token = relationship("EcommerceToken", back_populates="user")
