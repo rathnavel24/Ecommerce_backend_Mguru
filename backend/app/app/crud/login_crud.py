@@ -15,6 +15,9 @@ class LoginAbstract(ABC):
     @abstractmethod
     def token_generation():
         pass
+    @abstractmethod
+    def reset_password():
+        pass
 
 
 class LoginDetails(LoginAbstract):
@@ -30,6 +33,8 @@ class LoginDetails(LoginAbstract):
             ),
             Users.status == "active"
         ).first()
+
+    
 
         if not user:
             raise HTTPException(
@@ -83,3 +88,6 @@ class LoginDetails(LoginAbstract):
         self.db.refresh(user_token)
 
         return user_token.hashed_token
+    
+    
+

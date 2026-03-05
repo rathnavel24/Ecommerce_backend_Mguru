@@ -10,7 +10,8 @@ engine = create_engine(
         "ssl": {
             "ca": certifi.where()
         }
-    }
+    },
+    pool_pre_ping=True
 )
 
 sessionLocal = sessionmaker(bind=engine)
