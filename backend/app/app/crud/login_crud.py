@@ -31,6 +31,8 @@ class LoginDetails(LoginAbstract):
             Users.status == "active"
         ).first()
 
+    
+
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -83,3 +85,6 @@ class LoginDetails(LoginAbstract):
         self.db.refresh(user_token)
 
         return user_token.hashed_token
+    
+    
+

@@ -16,6 +16,9 @@ def verify_password(plain_password: str, password: str):
     """
     return pwd_context.verify(plain_password, password)
 
+# def hash_password(password):
+#     return pwd_context.hash(password)  
+
 SECRET_KEY = "MqbU2rs3hlCKUWrt3ZvTeg7NxVTgTBPlJkRLWLpgoDttc8IG6I0NTzDwwzJsk"
 ALGORITHM = "HS256"
 EXPIRE_MINUTES = 5
