@@ -3,14 +3,14 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
-from Schemas import ResetPassword
+from app.app.Schemas import resetpassword_schema
 from pydantic import BaseModel
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from app.app.core.security import verify_password, get_password_hash
 from app.app.api.deps import get_db
 from app.app.models.ecommerce_user import Users
-import models
+from app.app import models
 
 def reset_password(db: Session, data):
 
