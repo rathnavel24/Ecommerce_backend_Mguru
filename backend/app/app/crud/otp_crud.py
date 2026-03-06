@@ -38,3 +38,18 @@ def OtpSent(db:Session,user):
     server.send_message(msg)
     server.quit()
     return {"msg": "OTP sent"}
+def otp_resent(email,otp):
+    server = smtplib.SMTP('smtp.gmail.com',587)
+    server.starttls()
+    server.login('rathnavelpugazh@gmail.com','fyfh ruoi mjvo nson')
+    to_mail = email
+
+    msg = EmailMessage()
+    msg['Subject'] = "OTP Verification"
+    msg['From'] = 'rathnavelpugazh@gmail.com'
+    msg['To'] = to_mail
+    msg.set_content('Your_otp_is: '+otp)
+
+    server.send_message(msg)
+    server.quit()
+    return {"msg": "OTP sent"}

@@ -6,9 +6,14 @@ from app.app.api.endpoints import getuserinfo
  
 from app.app.api.endpoints import resetpassword
 from app.app.db.init_db import init_db
+from app.app.api.endpoints import otplogin
 
 
 app = FastAPI()
+
+init_db()
+
+
 
 
 app.add_middleware(
@@ -23,3 +28,4 @@ app.include_router(signup.router)
 app.include_router(login.router)
 app.include_router(getuserinfo.router)
 app.include_router(resetpassword.router)
+app.include_router(otplogin.router)
