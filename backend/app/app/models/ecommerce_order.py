@@ -15,7 +15,7 @@ class EcommerceOrder(Base):
     status = Column(Enum("active","inactive","deleted"))
 
     created_at = Column(TIMESTAMP, default=func.now())
-    updated_at = Column(TIMESTAMP, default=func.now())
+    updated_at = Column(TIMESTAMP, default=func.now(), onupdate=func.now())
     created_by = Column(String(100))
 
     user = relationship("Users", back_populates="orders")
