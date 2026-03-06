@@ -15,9 +15,9 @@ class LoginAbstract(ABC):
     @abstractmethod
     def token_generation():
         pass
-    @abstractmethod
-    def reset_password():
-        pass
+    # @abstractmethod
+    # def reset_password():
+    #     pass
 
 
 class LoginDetails(LoginAbstract):
