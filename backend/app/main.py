@@ -13,6 +13,8 @@ from app.app.api.endpoints import order
 
 # from app.app.api.order_router import router as order_router
 
+from app.app.api.endpoints import category
+
 
 app = FastAPI()
 
@@ -35,9 +37,15 @@ app.include_router(getuserinfo.router)
 app.include_router(forgotpassword.router)
 app.include_router(resetpassword.router)
 app.include_router(otplogin.router)
+<<<<<<< HEAD
 app.include_router(order.router)
 # app.include_router(address.router)
 
 
 
 
+=======
+
+
+app.include_router(category.router)
+>>>>>>> f7f6c58b4c8e79ab5f47ef75313c8c45784e096f
