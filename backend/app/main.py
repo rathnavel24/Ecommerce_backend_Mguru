@@ -2,9 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.app.api.endpoints import login
 from app.app.api.endpoints import verifyotp
-
-
-
+from app.app.api.endpoints import forgot_password
+from app.app.api.endpoints import reset_password
 
 
 app = FastAPI()
@@ -23,3 +22,5 @@ app.add_middleware(
 
 app.include_router(login.router)
 app.include_router(verifyotp.router)
+app.include_router(forgot_password.router)
+app.include_router(reset_password.router)
