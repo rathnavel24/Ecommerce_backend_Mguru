@@ -33,12 +33,10 @@ app.add_middleware(
 app.include_router(signup.router)
 app.include_router(login.router)
 app.include_router(getuserinfo.router)
-# app.include_router(forgotpassword.router)
+app.include_router(forgotpassword.router)
 app.include_router(resetpassword.router)
 app.include_router(otplogin.router)
 app.include_router(category.router)
-<<<<<<< HEAD
-app.include_router(forgotpassword.router)
-=======
+
 app.include_router(address.router)
->>>>>>> 1e523646ff603304c3a651b7fe30499a6a72c79f
+#>>>>>>> 1e523646ff603304c3a651b7fe30499a6a72c79f

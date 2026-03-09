@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 from sqlalchemy.orm import Session
 from app.app.models.ecomerce_useraddress import EcommerceUserAddress
 from app.app.Schemas.address_schema import UpdateAddress
@@ -79,5 +77,3 @@ def delete_address(db:Session, user_id:int):
 
 
 
-
->>>>>>> 1e523646ff603304c3a651b7fe30499a6a72c79f
