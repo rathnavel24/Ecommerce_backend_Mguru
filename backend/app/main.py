@@ -3,11 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.app.api.endpoints import login
 from app.app.api.endpoints import signup
 from app.app.api.endpoints import getuserinfo
-<<<<<<< HEAD
-from app.app.api.endpoints import forgotpassword
-=======
 from app.app.api.endpoints import category
->>>>>>> b6a6fade259a55639ef176240034b367f7f67f73
 from app.app.api.endpoints import resetpassword
 from app.app.db.init_db import init_db
 from app.app.api.endpoints import otplogin
