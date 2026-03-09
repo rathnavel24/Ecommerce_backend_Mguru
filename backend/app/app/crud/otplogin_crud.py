@@ -1,22 +1,21 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from app.app.crud.otp_crud import otp_resent , reset_otpkey
 from app.app.models.ecommerce_user import Users
 from app.app.models.ecommerce_userotp import EcommerceUserOtp
 from app.app.models.ecommerce_user import Users
-from app.app.core.security import  generate_otp
+from app.app.core.security import create_token
 
 
 def verify_otp(db: Session, email: str, otp: str):
 
-    user_id = db.query(Users).filter(Users.email == email).first()
+    user = db.query(Users).filter(Users.email == email).first()
 
-    if not user_id :
-        return "no user found"
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
 
     record = db.query(EcommerceUserOtp).filter(
-        EcommerceUserOtp.user_id == user_id.user_id,
+        EcommerceUserOtp.user_id == user.user_id,
         EcommerceUserOtp.otp == otp
     ).first()
 
@@ -28,28 +27,14 @@ def verify_otp(db: Session, email: str, otp: str):
         db.commit()
         raise HTTPException(status_code=400, detail="OTP expired")
 
+    access_token = create_token(
+        data={"sub": str(user.user_id)}
+    )
+
     db.delete(record)
     db.commit()
 
-    return {"message": "Login successful"}
-
-
-def resend_otp(db: Session, data):
-
-    otp = generate_otp()
-    user_id = db.query(Users).filter(Users.email == data.email).first()
-
-    if not user_id :
-        return "no user found"
-
-    reset_key = reset_otpkey(user_id.user_id)
-    db.query(EcommerceUserOtp).filter(EcommerceUserOtp.user_id == user_id.user_id).update({
-        "otp" : otp,
-        "reset_key" : reset_key
-    })
-    db.commit()
-
-    otp_resent(data.email, otp)
-
-    return {"message": "OTP resent",
-            "reset_key" : reset_key }
+    return {
+        "access_token": access_token,
+        "token_type": "bearer"
+    }
