@@ -5,7 +5,7 @@ from app.app.crud.category_crud import Category_Create,get_all_categories
 from app.app.crud.category_crud import update_category,delete_category
 from app.app.api.deps import get_db
 
-router = APIRouter()
+router = APIRouter(prefix="/category" , tags=["Category"])
 
 @router.get("/All")
 async def get_category(db:Session= Depends(get_db)):
@@ -16,7 +16,7 @@ async def create_new_category(data: CategoryCreate, db: Session= Depends(get_db)
     return Category_Create(db,data)
 
 @router.put("/update")
-def update_category_api(
+def update_category(
     categories_id : int,
     data: CategoryUpdate,
     db: Session = Depends(get_db)
@@ -24,7 +24,7 @@ def update_category_api(
     return update_category(db, categories_id, data)
 
 @router.delete("/delete")
-def delete_category_api(
+def delete_category(
     categories_id: int, db: Session= Depends(get_db)):
 
     return delete_category(db,categories_id)
