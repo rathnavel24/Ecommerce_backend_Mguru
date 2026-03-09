@@ -8,6 +8,11 @@ from app.app.api.endpoints import resetpassword
 from app.app.api.endpoints import forgotpassword
 from app.app.db.init_db import init_db
 from app.app.api.endpoints import otplogin
+# from app.app.api.endpoints import order
+from app.app.api.endpoints import address
+
+
+# from app.app.api.order_router import router as order_router
 
 
 app = FastAPI()
@@ -28,7 +33,12 @@ app.add_middleware(
 app.include_router(signup.router)
 app.include_router(login.router)
 app.include_router(getuserinfo.router)
+# app.include_router(forgotpassword.router)
 app.include_router(resetpassword.router)
 app.include_router(otplogin.router)
 app.include_router(category.router)
+<<<<<<< HEAD
 app.include_router(forgotpassword.router)
+=======
+app.include_router(address.router)
+>>>>>>> 1e523646ff603304c3a651b7fe30499a6a72c79f
