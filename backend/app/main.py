@@ -5,6 +5,7 @@ from app.app.api.endpoints import signup
 from app.app.api.endpoints import getuserinfo
 from app.app.api.endpoints import category
 from app.app.api.endpoints import resetpassword
+from app.app.api.endpoints import forgotpassword
 from app.app.db.init_db import init_db
 from app.app.api.endpoints import otplogin
 
@@ -30,3 +31,4 @@ app.include_router(getuserinfo.router)
 app.include_router(resetpassword.router)
 app.include_router(otplogin.router)
 app.include_router(category.router)
+app.include_router(forgotpassword.router)

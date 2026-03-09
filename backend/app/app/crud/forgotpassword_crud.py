@@ -9,6 +9,8 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from app.app.core.security import verify_password, get_password_hash
 from app.app.api.deps import get_db
+from app.app.crud.otp_crud import OtpSent
+from app.app.models.ecommerce_userotp import EcommerceUserOtp
 from app.app.models.ecommerce_user import Users
 from app.app import models
 import random
@@ -24,13 +26,6 @@ def forgot_password(db: Session, email: str):
             detail="Email not found"
         )
     
-    OTP = random.randint(10000,999999)
-    user.otp = OTP
-    user.opt_expiry = datetime.now() + timedelta(minutes=30)
-    
-    db.commit()
+    OTP = OtpSent(db,user)
 
-    return{
-        "msg": "OTP sent to email",
-        "otp": OTP
-    }
+    return OTP
