@@ -2,18 +2,28 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
-
-from app.app.Schemas import resetpassword_schema
+from app.app.Schemas.resetpassword_schema import ResetPassword
 from pydantic import BaseModel
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from app.app.core.security import verify_password, get_password_hash
 from app.app.api.deps import get_db
 from app.app.models.ecommerce_user import Users
+from app.app.models.ecommerce_userotp import EcommerceUserOtp
 from app.app import models
 
-def reset_password(db: Session, data):
+def reset_password(db: Session, data:ResetPassword):
 
+
+
+    user = db.query(EcommerceUserOtp).filter(EcommerceUserOtp.reset_key == data.token)
+
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Invalid Token")
+
+
+
+    '''
     user = db.query(Users).filter(or_(
         Users.user_id == data.user_id,
         Users.email == data.email
@@ -36,5 +46,4 @@ def reset_password(db: Session, data):
     db.commit()
 
     return "Password updated successfully"
-     
-    
+    '''

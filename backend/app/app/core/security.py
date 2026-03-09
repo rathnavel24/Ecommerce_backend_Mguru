@@ -19,8 +19,8 @@ def verify_password(plain_password: str, hashed_password: str):
     """
     return pwd_context.verify(plain_password, hashed_password)
 
-# def hash_password(password):
-#     return pwd_context.hash(password)  
+def hash_password(password):
+    return pwd_context.hash(password)  
 
 SECRET_KEY = "MqbU2rs3hlCKUWrt3ZvTeg7NxVTgTBPlJkRLWLpgoDttc8IG6I0NTzDwwzJsk"
 ALGORITHM = "HS256"
@@ -47,3 +47,7 @@ def decode_token(token):
 
 def generate_otp():
     return str(random.randint(100000,999999))
+
+def reset_otpkey(id):
+    secret_otp = str(id) +""+ SECRET_KEY
+    return pwd_context.hash(secret_otp)

@@ -1,5 +1,5 @@
 from app.app.db.base import Base
-from sqlalchemy import Column, Integer, Boolean, TIMESTAMP, ForeignKey
+from sqlalchemy import Column, Integer, Boolean, TIMESTAMP, ForeignKey,String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from datetime import timedelta
@@ -11,6 +11,8 @@ class EcommerceUserOtp(Base):
     user_id = Column(Integer, ForeignKey("users.user_id"))
 
     otp = Column(Integer)
+
+    reset_key = Column(String(255))
 
     expires_at = Column(TIMESTAMP)
 
