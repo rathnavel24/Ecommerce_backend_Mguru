@@ -1,3 +1,4 @@
+'''
 from fastapi import HTTPException
 from starlette import status 
 from app.app.models.ecommerce_user import Users
@@ -35,3 +36,4 @@ class GetUserInfo(GetUserInfoAbstract):
         except Exception as e:
             raise e
 
+'''

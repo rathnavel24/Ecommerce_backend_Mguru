@@ -1,11 +1,11 @@
 import random 
 import smtplib
-from app.app.core.security import reset_otpkey
+#from app.app.core.security import reset_otpkey
 from app.app.models.ecommerce_userotp import EcommerceUserOtp
 from sqlalchemy.orm import Session
 from email.message import EmailMessage
 from datetime import datetime, timedelta
-
+'''
 def OtpSent(db:Session,user):
     otp = ""
 
@@ -42,9 +42,9 @@ def OtpSent(db:Session,user):
     server.quit()
     return {"msg": "OTP sent",
             "reset_key" : user_otp.reset_key}
+'''
 
-
-def otp_resent(email,otp):
+def otp_sent(email,otp):
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.starttls()
     server.login('rathnavelpugazh@gmail.com','fyfh ruoi mjvo nson')

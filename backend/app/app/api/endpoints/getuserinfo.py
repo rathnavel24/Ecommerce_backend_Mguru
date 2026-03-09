@@ -1,5 +1,5 @@
+'''
 from fastapi import APIRouter,Depends
-from app.app.Schemas.userlogin_schema import UserLogin
 from sqlalchemy.orm import Session
 from app.app.crud.getuserinfo_crud import GetUserInfo
 from app.app.api.deps import get_db
@@ -14,3 +14,4 @@ async def getuserinfo(token: str = Depends(oauth2_scheme),db:Session =  Depends(
             return GetUserInfo(db,token).getuserinfo()
         except Exception as e:
              raise e
+             '''
