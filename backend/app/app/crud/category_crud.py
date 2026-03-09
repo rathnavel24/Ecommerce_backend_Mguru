@@ -62,7 +62,7 @@ def delete_category(db:Session, category_id : int):
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
     category.status = "deleted"
-    # db.delete(category)
+    
     db.commit()
     db.refresh(category)
 
