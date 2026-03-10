@@ -29,10 +29,5 @@ def get_current_user(token=Depends(security)):
 
         return payload
 
-<<<<<<< HEAD
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
-=======
-    except jwt.JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
->>>>>>> 83e2f83e46b573eae6fda581dcdc2cee25e18db3
