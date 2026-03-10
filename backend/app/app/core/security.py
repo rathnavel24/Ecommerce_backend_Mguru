@@ -19,12 +19,12 @@ def verify_password(plain_password: str, hashed_password: str):
     """
     return pwd_context.verify(plain_password, hashed_password)
 
-# def hash_password(password):
-#     return pwd_context.hash(password)  
+
 
 SECRET_KEY = "MqbU2rs3hlCKUWrt3ZvTeg7NxVTgTBPlJkRLWLpgoDttc8IG6I0NTzDwwzJsk"
 ALGORITHM = "HS256"
 EXPIRE_MINUTES = 5
+
 
 def create_token(data):
     user_token = {}
@@ -32,7 +32,7 @@ def create_token(data):
     expire = dt.now()+timedelta(minutes=EXPIRE_MINUTES)
     user_token.update({"exp":expire})
     return jwt.encode(user_token,SECRET_KEY,ALGORITHM)
-
+    
 
 
 def decode_token(token):
@@ -43,6 +43,7 @@ def decode_token(token):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Token has expired")
         except JWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="invalid token")
+
 
 
 def generate_otp():

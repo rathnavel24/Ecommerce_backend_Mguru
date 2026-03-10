@@ -3,6 +3,7 @@ from app.app.Schemas.userlogin_schema import UserLogin
 from sqlalchemy.orm import Session
 from app.app.crud.login_crud import LoginDetails
 from app.app.api.deps import get_db
+
 router = APIRouter()
 
 @router.post("/login")
