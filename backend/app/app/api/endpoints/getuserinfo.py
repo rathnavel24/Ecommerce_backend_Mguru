@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 
-@router.post("/get_user_info")
+@router.post("/getuserinfo")
 async def get_user_info(user=Depends(get_current_user),
                           db: Session = Depends(get_db)):
     try:

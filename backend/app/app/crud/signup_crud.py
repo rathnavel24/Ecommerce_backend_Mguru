@@ -3,7 +3,8 @@ from app.app.core.security import get_password_hash
 from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from abc import ABC,abstractmethod
-
+from fastapi import HTTPException
+from starlette import status
 class SignUpAbstract(ABC):
 
     @abstractmethod
@@ -34,10 +35,7 @@ class SignUpDetails(SignUpAbstract):
             return {
                 "msg" : "User Created Successfully"
             }
-        return {
-            "msg":"User already Exists"
-            }
-        
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="User already Exists")
 
     def user_verification(self) -> bool: 
         user = self.db.query(Users).filter(

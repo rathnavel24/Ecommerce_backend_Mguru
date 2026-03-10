@@ -10,4 +10,4 @@ async def signup(user_data:UserSignUp,db:Session =  Depends(get_db)):
         try :
             return SignUpDetails(db,user_data).user_signup()
         except Exception as e:
-             return e
+             raise e

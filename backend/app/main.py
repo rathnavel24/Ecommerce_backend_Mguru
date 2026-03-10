@@ -6,6 +6,7 @@ from app.app.api.endpoints import forgot_password
 from app.app.api.endpoints import reset_password
 from app.app.api.endpoints import changepassword
 from app.app.api.endpoints import getuserinfo
+from app.app.api.endpoints import signup
 
 app = FastAPI()
 
@@ -21,6 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(signup.router)
 app.include_router(login.router)
 app.include_router(verifyotp.router)
 app.include_router(forgot_password.router)

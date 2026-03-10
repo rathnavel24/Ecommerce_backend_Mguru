@@ -37,5 +37,5 @@ class ForgotPasswordCRUD:
 
         return {
             "message": "OTP sent successfully",
-            "reset_key": reset_key
+            "otp_key": reset_key
         }
