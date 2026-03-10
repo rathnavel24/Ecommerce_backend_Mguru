@@ -10,7 +10,7 @@ class Users(Base):
     username = Column(String(100))
     email = Column(String(255), unique=True)
     password = Column(String(255))
-    type = Column(String(100))
+    type = Column(Enum('admin','merchant','user'),default='user')
     is2FA = Column(Boolean, default=False)
     status = Column(Enum("active", "inactive", "deleted"),default="active")
     created_at = Column(TIMESTAMP, default=func.now())
@@ -18,7 +18,6 @@ class Users(Base):
     created_by = Column(String(100),default = "ADMIN")
 
     user_otp = relationship("EcommerceUserOtp", back_populates="user")
-    token = relationship("EcommerceToken", back_populates="user")
     addresses = relationship("EcommerceUserAddress", back_populates="user")
     cart = relationship("EcommerceCart", back_populates="user")
     orders = relationship("EcommerceOrder", back_populates="user")

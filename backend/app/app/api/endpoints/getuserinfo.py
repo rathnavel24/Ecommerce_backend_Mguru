@@ -1,17 +1,18 @@
-'''
-from fastapi import APIRouter,Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from app.app.db.session import sessionLocal
 from app.app.crud.getuserinfo_crud import GetUserInfo
+from app.app.api.deps import get_current_user
 from app.app.api.deps import get_db
-from fastapi.security import OAuth2PasswordBearer
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 router = APIRouter()
 
-@router.get("/getuserinfo")
-async def getuserinfo(token: str = Depends(oauth2_scheme),db:Session =  Depends(get_db)):
-        try :
-            return GetUserInfo(db,token).getuserinfo()
-        except Exception as e:
-             raise e
-             '''
+
+
+@router.post("/getuserinfo")
+async def get_user_info(user=Depends(get_current_user),
+                          db: Session = Depends(get_db)):
+    try:
+        return GetUserInfo(db,user['user_id']).getuserinfo()
+    except Exception as e:
+        return e

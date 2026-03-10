@@ -1,49 +1,9 @@
 import random 
 import smtplib
-#from app.app.core.security import reset_otpkey
 from app.app.models.ecommerce_userotp import EcommerceUserOtp
 from sqlalchemy.orm import Session
 from email.message import EmailMessage
 from datetime import datetime, timedelta
-'''
-def OtpSent(db:Session,user):
-    otp = ""
-
-    for i in range(6):
-        otp+=str(random.randint(0,9))
-
-    server = smtplib.SMTP('smtp.gmail.com',587)
-    server.starttls()
-    server.login('rathnavelpugazh@gmail.com','fyfh ruoi mjvo nson')
-    to_mail = user.email
-    expiry_time = datetime.now() + timedelta(minutes=5)
-
-
-    user_otp = EcommerceUserOtp(
-        user_id=user.user_id,
-        otp=otp,
-        expires_at=expiry_time,
-        reset_key = reset_otpkey(user.user_id),
-        is_used=False
-    )
-
-    db.add(user_otp)
-    db.commit()
-    db.refresh(user_otp)
-
-    msg = EmailMessage()
-
-    msg['Subject'] = "OTP Verification"
-    msg['From'] = 'rathnavelpugazh@gmail.com'
-    msg['To'] = to_mail
-    msg.set_content('Your_otp_is: '+otp)
-
-    server.send_message(msg)
-    server.quit()
-    return {"msg": "OTP sent",
-            "reset_key" : user_otp.reset_key}
-'''
-
 def otp_sent(email,otp):
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.starttls()

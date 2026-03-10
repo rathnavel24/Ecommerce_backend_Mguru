@@ -33,9 +33,10 @@ class ForgotPasswordCRUD:
         self.db.add(otp_entry)
         self.db.commit()
 
-        otp_sent(user.email, otp)
+        print(otp)
+        #otp_sent(user.email, otp)
 
         return {
             "message": "OTP sent successfully",
-            "reset_key": reset_key
+            "otp_key": reset_key
         }
