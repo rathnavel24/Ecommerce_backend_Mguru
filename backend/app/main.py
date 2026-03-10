@@ -9,6 +9,10 @@ from app.app.api.endpoints import productinfo
 from app.app.api.endpoints import inventory
 
 
+from app.app.api.endpoints import changepassword
+from app.app.api.endpoints import getuserinfo
+from app.app.api.endpoints import signup
+from app.app.api.endpoints import resendotp
 app = FastAPI()
 
 
@@ -23,6 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(signup.router)
 app.include_router(login.router)
 app.include_router(verifyotp.router)
 app.include_router(forgot_password.router)
@@ -30,3 +35,6 @@ app.include_router(reset_password.router)
 app.include_router(category.router)
 app.include_router(productinfo.router)
 app.include_router(inventory.router)
+app.include_router(changepassword.router)
+app.include_router(getuserinfo.router)
+app.include_router(resendotp.router)
