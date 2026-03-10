@@ -50,8 +50,9 @@ class LoginUser:
             }
 
         token = create_access_token(
-            data={"user_id": user.user_id}
-        )
+            data={"user_id": user.user_id,
+                  "role": user.type
+                })
 
         return {
             "token": token,
