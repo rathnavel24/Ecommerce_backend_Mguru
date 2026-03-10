@@ -7,8 +7,6 @@ from app.app.api.endpoints import reset_password
 from app.app.api.endpoints import category
 from app.app.api.endpoints import productinfo
 from app.app.api.endpoints import inventory
-
-
 from app.app.api.endpoints import changepassword
 from app.app.api.endpoints import getuserinfo
 from app.app.api.endpoints import signup
