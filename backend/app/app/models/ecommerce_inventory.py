@@ -11,10 +11,9 @@ class EcommerceInventory(Base):
     stock_quantity = Column(Integer)
     reserved_quantity = Column(Integer)
     last_restocked_at = Column(TIMESTAMP, default=func.now())
-
     status = Column(Enum("active","inactive","deleted"))
     created_at = Column(TIMESTAMP, default=func.now())
-    updated_at = Column(TIMESTAMP, default=func.now())
+    updated_at = Column(TIMESTAMP, default=None, onupdate=func.now())
     created_by = Column(String(100))
 
     product = relationship("EcommerceProductInfo", back_populates="inventory")
