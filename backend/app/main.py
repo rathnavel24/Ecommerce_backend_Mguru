@@ -5,7 +5,7 @@ from app.app.api.endpoints import verifyotp
 from app.app.api.endpoints import forgot_password
 from app.app.api.endpoints import reset_password
 from app.app.api.endpoints import changepassword
-
+from app.app.api.endpoints import getuserinfo
 
 app = FastAPI()
 
@@ -26,3 +26,4 @@ app.include_router(verifyotp.router)
 app.include_router(forgot_password.router)
 app.include_router(reset_password.router)
 app.include_router(changepassword.router)
+app.include_router(getuserinfo.router)

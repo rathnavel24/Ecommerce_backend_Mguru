@@ -1,28 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
 from app.app.db.session import sessionLocal
 from app.app.Schemas.change_password_schema import ChangePassword
 from app.app.crud.change_password_crud import ChangePasswordCRUD
 from app.app.api.deps import get_current_user
+from app.app.api.deps import get_db
 
 router = APIRouter()
 
 
-def get_db():
-    db = sessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 @router.post("/change-password")
-async def change_password(
-    data: ChangePassword,
-    user=Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
+async def change_password(data: ChangePassword,user=Depends(get_current_user),
+                          db: Session = Depends(get_db)):
 
     try:
 
