@@ -20,22 +20,6 @@ def verify_password(plain_password: str, hashed_password: str):
     """
     return pwd_context.verify(plain_password, hashed_password)
 
-<<<<<<< HEAD
-
-
-SECRET_KEY = "MqbU2rs3hlCKUWrt3ZvTeg7NxVTgTBPlJkRLWLpgoDttc8IG6I0NTzDwwzJsk"
-ALGORITHM = "HS256"
-EXPIRE_MINUTES = 5
-
-
-def create_token(data):
-    user_token = {}
-    user_token.update(data)
-    expire = dt.now()+timedelta(minutes=EXPIRE_MINUTES)
-    user_token.update({"exp":expire})
-    return jwt.encode(user_token,SECRET_KEY,ALGORITHM)
-    
-=======
 def hash_password(password):
     return pwd_context.hash(password)  
 
@@ -43,7 +27,6 @@ SECRET_KEY = "MqbU2rs3hlCKUWrt3ZvTeg7NxVTgTBPlJkRLWLpgoDttc8IG6I0NTzDwwzJsk"
 ALGORITHM = "HS256"
 EXPIRE_MINUTES = 60
 
->>>>>>> 647d57c7e93122d907efcae0a4babf021094a3bf
 
 def create_access_token(data: dict):
 
@@ -61,7 +44,7 @@ def create_access_token(data: dict):
 
     return encoded_jwt
 
-import random
+# import random
 
 
 def generate_otp():
