@@ -1,6 +1,13 @@
 from app.app.db.base import Base
 from sqlalchemy import Column,String,TEXT,TIMESTAMP,Integer,func,DECIMAL,Enum,ForeignKey
 from sqlalchemy.orm import relationship
+import random 
+import string
+
+def generate_sku():
+    characters = string.ascii_uppercase + string.digits
+    return ''.join(random.choice(characters) for _ in range(10))
+
 
 class EcommerceProductInfo(Base):
     __tablename__ = 'product_info'
@@ -15,7 +22,7 @@ class EcommerceProductInfo(Base):
 
     description = Column(TEXT)
     image_url = Column(TEXT)
-    sku = Column(String(100))
+    sku = Column(String(100), unique=True, default=generate_sku)
 
     status = Column(Enum('active','inactive','deleted'))
 

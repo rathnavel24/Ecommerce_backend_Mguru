@@ -1,93 +1,62 @@
-from fastapi import HTTPException
-from app.app.models.ecommerce_user import Users
-from app.app.models.ecommerce_token import EcommerceToken
-from starlette import status
 from sqlalchemy.orm import Session
-from app.app.crud.otp_crud import OtpSent
-from app.app.core.security import verify_password, create_token
-from sqlalchemy import or_
-from abc import ABC,abstractmethod
+from fastapi import HTTPException
+from starlette import status
+from datetime import datetime,timedelta
+from app.app.models.ecommerce_userotp import EcommerceUserOtp
+from app.app.models.ecommerce_user import Users
+from app.app.core.security import verify_password, create_access_token
+from app.app.crud.otp_crud import otp_sent
+from app.app.core.security import generate_otp , generate_otp_key
+class LoginUser:
 
-class LoginAbstract(ABC):
-    @abstractmethod
-    def user_validation():
-        pass
-    @abstractmethod
-    def token_generation():
-        pass
-    # @abstractmethod
-    # def reset_password():
-    #     pass
-
-
-class LoginDetails(LoginAbstract):
-    def __init__(self,db:Session, user_data):
+    def __init__(self, db, email, password):
         self.db = db
-        self.user_data = user_data
-    def user_validation(self):
+        self.email = email
+        self.password = password
+
+    def login(self):
 
         user = self.db.query(Users).filter(
-            or_(
-                Users.username == self.user_data.username,
-                Users.email == self.user_data.email
-            ),
-            Users.status == "active"
+            Users.email == self.email
         ).first()
 
-    
-
         if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
-            )
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="no user found")
 
+        if not verify_password(self.password, user.password):
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Wrong password")
+
+        # If 2FA enabled
         if user.is2FA:
-            return OtpSent(self.db, user)
 
-        verify_user_password = verify_password(
-            self.user_data.password,
-            user.password
-        )
+            otp = generate_otp()
+            otp_key = generate_otp_key()
 
-        if not verify_user_password:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Wrong Password"
+            otp_entry = EcommerceUserOtp(
+                user_id=user.user_id,
+                otp=otp,
+                reset_key=otp_key,
+                expires_at=datetime.now() + timedelta(minutes=5),
+                is_used=False
             )
 
-        token = self.token_generation(user.user_id)
+            self.db.add(otp_entry)
+            self.db.commit()
+
+            # Send OTP via email or SMS
+            otp_sent(user.email, otp)
+
+            return {
+                "message": "OTP sent",
+                "otp_key": otp_key
+            }
+
+        # If 2FA disabled
+        token = create_access_token(
+            data={"user_id": user.user_id}
+        )
 
         return {
-            "msg": "Login successful",
-            "token": token
+            "access_token": token,
+            "token_type": "bearer"
         }
-        
-        
-    def token_generation(self,user_id):
-
-        user_token = (
-            self.db.query(EcommerceToken)
-            .filter(EcommerceToken.user_id == user_id)
-            .first()
-        )
-
-        token = create_token({"sub": str(user_id)})
-
-        if not user_token:
-            user_token = EcommerceToken(
-                user_id=user_id,
-                hashed_token=token
-            )
-            self.db.add(user_token)
-
-        else:
-            user_token.hashed_token = token
-
-        self.db.commit()
-        self.db.refresh(user_token)
-
-        return user_token.hashed_token
-    
-    
-

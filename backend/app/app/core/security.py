@@ -1,10 +1,11 @@
 from fastapi import HTTPException
 from passlib.context import CryptContext
 from datetime import datetime as dt
-from datetime import timedelta
+from datetime import timedelta,datetime
 from jose import ExpiredSignatureError, JWTError, jwt
 from starlette import status
 import random
+import uuid
 
 
 
@@ -19,6 +20,7 @@ def verify_password(plain_password: str, hashed_password: str):
     """
     return pwd_context.verify(plain_password, hashed_password)
 
+<<<<<<< HEAD
 
 
 SECRET_KEY = "MqbU2rs3hlCKUWrt3ZvTeg7NxVTgTBPlJkRLWLpgoDttc8IG6I0NTzDwwzJsk"
@@ -33,18 +35,39 @@ def create_token(data):
     user_token.update({"exp":expire})
     return jwt.encode(user_token,SECRET_KEY,ALGORITHM)
     
+=======
+def hash_password(password):
+    return pwd_context.hash(password)  
 
+SECRET_KEY = "MqbU2rs3hlCKUWrt3ZvTeg7NxVTgTBPlJkRLWLpgoDttc8IG6I0NTzDwwzJsk"
+ALGORITHM = "HS256"
+EXPIRE_MINUTES = 60
 
-def decode_token(token):
-        try:
-            payload = jwt.decode(token,algorithms=ALGORITHM,key=SECRET_KEY)
-            return payload
-        except ExpiredSignatureError:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Token has expired")
-        except JWTError:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="invalid token")
+>>>>>>> 647d57c7e93122d907efcae0a4babf021094a3bf
 
+def create_access_token(data: dict):
+
+    to_encode = data.copy()
+
+    expire = datetime.now() + timedelta(minutes=EXPIRE_MINUTES)
+
+    to_encode.update({"exp": expire})
+
+    encoded_jwt = jwt.encode(
+        to_encode,
+        SECRET_KEY,
+        algorithm=ALGORITHM
+    )
+
+    return encoded_jwt
+
+import random
 
 
 def generate_otp():
     return str(random.randint(100000,999999))
+
+
+
+def generate_otp_key():
+    return str(uuid.uuid4())
