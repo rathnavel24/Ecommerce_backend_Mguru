@@ -14,7 +14,7 @@ class EcommerceUserAddress(Base):
     state = Column(String(50))
     country = Column(String(50))
     pincode = Column(String(10))
-    isdefault = Column(Boolean)
+    isdefault = Column(Boolean, default=False)
 
     user = relationship("Users", back_populates="addresses")
     orders = relationship("EcommerceOrder", back_populates="address")

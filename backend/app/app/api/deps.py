@@ -1,7 +1,7 @@
 from app.app.db.session import sessionLocal
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer
-from jose import jwt
+from jose import jwt, JWTError
 
 def get_db():
     db = sessionLocal()
@@ -29,5 +29,5 @@ def get_current_user(token=Depends(security)):
 
         return payload
 
-    except jwt.JWTError:
+    except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid token")

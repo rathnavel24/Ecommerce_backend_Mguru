@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.app.api.endpoints import login
 from app.app.api.endpoints import verifyotp
+from app.app.api.endpoints import forgot_password
+from app.app.api.endpoints import address
+from app.app.api.endpoints import order
 from app.app.api.endpoints import category
 from app.app.api.endpoints import productinfo
 from app.app.api.endpoints import inventory
@@ -34,6 +37,8 @@ app.include_router(verifyotp.router)
 app.include_router(forgot_password.router)
 app.include_router(verify_forgot_otp.router)
 app.include_router(set_new_password.router)
+app.include_router(address.router)
+app.include_router(order.router)
 app.include_router(category.router)
 app.include_router(productinfo.router)
 app.include_router(inventory.router)

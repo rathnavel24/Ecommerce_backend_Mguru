@@ -1,45 +1,58 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.app.api.deps import get_db
-from app.app.Schemas.address_schema import CreateAddress,UpdateAddress
+from app.app.api.deps import get_db, get_current_user
+from app.app.Schemas.address_schema import CreateAddress, UpdateAddress
 from app.app.crud import address_crud
-from app.app.crud.address_crud import delete_address
 
 router = APIRouter(prefix="/address", tags=["Address"])
 
 
-
-@router.get("/")
-def get_addresses(db: Session = Depends(get_db)):
-    return address_crud.get_addresses(db)
-
+# CREATE ADDRESS
 @router.post("/create")
 def create_address(
-    data: CreateAddress, 
-    db: Session = Depends(get_db)
+    data: CreateAddress,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
 ):
-    return address_crud.create_address(db, data)
+
+    user_id = current_user["user_id"]
+
+    return address_crud.create_address(db, data, user_id)
 
 
-@router.get("/{user_id}")
-def get_address(
-    user_id: int, 
-    db: Session = Depends(get_db)
+# GET MY ADDRESSES
+@router.get("/my")
+def get_my_addresses(
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
 ):
+
+    user_id = current_user["user_id"]
+
     return address_crud.get_user_by_id(db, user_id)
 
-@router.put("/update")
-def update_user_address(
-    user_id: int, 
-    data: UpdateAddress, 
-    db: Session = Depends(get_db)
-):
-    return address_crud.update_address(db,user_id,data)
 
-@router.delete("/delete")
-def delete_user_address(
-    user_id:int, 
-    db: Session= Depends(get_db)
+# UPDATE ADDRESS
+@router.put("/update")
+def update_address(
+    data: UpdateAddress,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
 ):
-    return delete_address(db,user_id)
+
+    user_id = current_user["user_id"]
+
+    return address_crud.update_address(db, user_id, data)
+
+
+# DELETE ADDRESS
+@router.delete("/delete")
+def delete_address(
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+
+    user_id = current_user["user_id"]
+
+    return address_crud.delete_address(db, user_id)

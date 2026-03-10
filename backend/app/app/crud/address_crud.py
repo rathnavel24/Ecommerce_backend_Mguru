@@ -1,12 +1,14 @@
 from sqlalchemy.orm import Session
 from app.app.models.ecomerce_useraddress import EcommerceUserAddress
 from app.app.Schemas.address_schema import UpdateAddress
-from app.app.models.ecommerce_user import Users
 from fastapi import HTTPException
 
-def create_address(db: Session, data):
+
+# CREATE ADDRESS
+def create_address(db: Session, data, user_id: int):
+
     address = EcommerceUserAddress(
-        user_id=data.user_id,
+        user_id=user_id,
         address_line1=data.address_line1,
         address_line2=data.address_line2,
         city=data.city,
@@ -23,57 +25,57 @@ def create_address(db: Session, data):
     return address
 
 
+# GET ALL ADDRESSES
 def get_addresses(db: Session):
     return db.query(EcommerceUserAddress).all()
 
 
+# GET USER ADDRESSES
 def get_user_by_id(db: Session, user_id: int):
+
+    addresses = db.query(EcommerceUserAddress).filter(
+        EcommerceUserAddress.user_id == user_id
+    ).all()
+
+    if not addresses:
+        raise HTTPException(status_code=404, detail="Address not found")
+
+    return addresses
+
+
+# UPDATE ADDRESS (PARTIAL UPDATE)
+def update_address(db: Session, user_id: int, data: UpdateAddress):
+
     address = db.query(EcommerceUserAddress).filter(
         EcommerceUserAddress.user_id == user_id
     ).first()
+
     if not address:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Address not found")
+
+    update_data = data.dict(exclude_unset=True)
+
+    for key, value in update_data.items():
+        setattr(address, key, value)
+
     db.commit()
     db.refresh(address)
+
     return address
 
 
-def update_address(db:Session, user_id:int, data:UpdateAddress):
-    user_address = db.query(EcommerceUserAddress).filter(EcommerceUserAddress.user_id == user_id).first()
-    if not user_address:
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    user_address.address_line1 = data.address_line1
-    user_address.address_line2 = data.address_line2
-    user_address.city = data.city
-    user_address.state = data.state
-    user_address.country = data.country
-    user_address.pincode = data.pincode
-    user_address.isdefault = data.isdefault
+# DELETE ADDRESS
+def delete_address(db: Session, user_id: int):
 
-    db.commit()
-    db.refresh(user_address)
-    return user_address
-
-       
-
-def delete_address(db:Session, user_id:int):
-    user_address = db.query(EcommerceUserAddress).filter(
+    address = db.query(EcommerceUserAddress).filter(
         EcommerceUserAddress.user_id == user_id
     ).first()
-    if not user_address:
-        raise HTTPException(status_code=404, detail="address not found")
-    user_address.status = "deleted"
+
+    if not address:
+        raise HTTPException(status_code=404, detail="Address not found")
     
-    db.delete(user_address)
+   
+    db.delete(address)
     db.commit()
-    return "User address deleted successfully"
-    
-        
-    
-    
 
-
-
-
-
+    return {"message": "User address deleted successfully"}
