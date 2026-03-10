@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 
-@router.post("/set-new-password")
+@router.post("/set_new_password")
 async def set_new_password(data: SetNewPassword, db: Session = Depends(get_db)):
     try:
         return SetNewPasswordCRUD(

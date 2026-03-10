@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 
-@router.post("/verify-forgot-otp")
+@router.post("/verify_forgot_otp")
 async def verify_forgot_otp(data: VerifyForgotOTP, db: Session = Depends(get_db)):
     try:
         return VerifyForgotOTPCRUD(db, data.otp_key, data.otp).verify()
