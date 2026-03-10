@@ -25,7 +25,6 @@ class LoginUser:
         if not verify_password(self.password, user.password):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="Wrong password")
 
-        # If 2FA enabled
         if user.is2FA:
 
             otp = generate_otp()
@@ -42,15 +41,14 @@ class LoginUser:
             self.db.add(otp_entry)
             self.db.commit()
 
-            # Send OTP via email or SMS
-            otp_sent(user.email, otp)
 
+            #otp_sent(user.email, otp)
+            print(otp)
             return {
                 "message": "OTP sent",
                 "otp_key": otp_key
             }
 
-        # If 2FA disabled
         token = create_access_token(
             data={"user_id": user.user_id}
         )
