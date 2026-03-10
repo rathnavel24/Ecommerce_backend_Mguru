@@ -7,7 +7,7 @@ from app.app.api.endpoints import reset_password
 from app.app.api.endpoints import changepassword
 from app.app.api.endpoints import getuserinfo
 from app.app.api.endpoints import signup
-
+from app.app.api.endpoints import resendotp
 app = FastAPI()
 
 
@@ -29,3 +29,4 @@ app.include_router(forgot_password.router)
 app.include_router(reset_password.router)
 app.include_router(changepassword.router)
 app.include_router(getuserinfo.router)
+app.include_router(resendotp.router)

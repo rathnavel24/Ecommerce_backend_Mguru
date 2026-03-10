@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
 class ResetPassword(BaseModel):
-    otp_key: str
+    reset_key: str
     otp: str
     new_password: str
