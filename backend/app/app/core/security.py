@@ -44,7 +44,8 @@ def create_access_token(data: dict):
 
     return encoded_jwt
 
-import random
+# import random
+
 
 def generate_otp():
     return str(random.randint(100000,999999))
