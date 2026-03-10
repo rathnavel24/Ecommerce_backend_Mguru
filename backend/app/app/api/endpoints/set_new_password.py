@@ -1,20 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.app.db.session import sessionLocal
-from app.app.Schemas.reset_password_schema import ResetPassword
-from app.app.crud.reset_password_crud import ResetPasswordCRUD
+from app.app.Schemas.set_new_password_schema import SetNewPassword
+from app.app.crud.set_new_password_crud import SetNewPasswordCRUD
 from app.app.api.deps import get_db
 
 router = APIRouter()
 
-@router.post("/reset-password")
-async def reset_password(data: ResetPassword, db: Session = Depends(get_db)):
 
+
+@router.post("/set-new-password")
+async def set_new_password(data: SetNewPassword, db: Session = Depends(get_db)):
     try:
-        return ResetPasswordCRUD(
+        return SetNewPasswordCRUD(
             db,
-            data.reset_key,
-            data.otp,
+            data.otp_key,
             data.new_password
         ).reset()
 
