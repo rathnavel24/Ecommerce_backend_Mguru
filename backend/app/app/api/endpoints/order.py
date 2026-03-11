@@ -28,7 +28,7 @@ def create_user_order(
 @router.get("/my")
 def get_my_orders(
     db: Session = Depends(get_db),
-    user=Depends(role_required(["user"]))
+    user=Depends(role_required(["user","admin"]))
 ):
     order_service = OrderDetails(db)
 

@@ -10,7 +10,26 @@ class CartDetails:
     def __init__(self, db: Session):
         self.db = db
 
+    def get_cart(self, user_id: int):
 
+        cart_items = self.db.query(EcommerceCart).filter(
+            EcommerceCart.user_id == user_id,
+            EcommerceCart.status == "active"
+        ).all()
+
+        if not cart_items:
+            raise HTTPException(status_code=404, detail="Cart is empty")
+
+        result = []
+
+        for item in cart_items:
+
+            data = item.__dict__.copy()
+            data.pop("_sa_instance_state", None)
+
+            result.append(data)
+
+        return result
     def update_cart(self, user_id: int, items: list):
 
         updated_cart = []
@@ -48,9 +67,8 @@ class CartDetails:
                     user_id=user_id,
                     product_id=item.product_id,
                     quantity=item.quantity,
-                    total_price=item.quantity * product.price,
                     status="active",
-                    createdby="user"
+                    created_by="user"
                 )
                 self.db.add(cart_item)
 
@@ -69,7 +87,9 @@ class CartDetails:
 
         self.db.commit()
 
-        return updated_cart
+        return {
+            "msg" : "updated cart successfully" 
+        }
     def remove_items(self, user_id: int, product_ids: list):
 
         for pid in product_ids:

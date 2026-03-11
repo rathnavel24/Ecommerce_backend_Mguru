@@ -43,7 +43,7 @@ class OrderDetails:
     # USER - Get Own Orders
     def get_user_orders(self, user_id: int, role: str):
 
-        if role != "user":
+        if role != "admin":
             raise HTTPException(status_code=403, detail="Only user can view own orders")
 
         return self.db.query(EcommerceOrder).filter(

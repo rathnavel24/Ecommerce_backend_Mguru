@@ -22,7 +22,11 @@ class CheckoutService:
         if not cart_items:
             raise HTTPException(400, "Cart empty")
 
-        total_price = sum(i.total_price for i in cart_items)
+        total_price = 0
+
+        for item in cart_items:
+            product = item.product
+            total_price += product.price * item.quantity
 
         order = EcommerceOrder(
             user_id=user_id,
@@ -30,7 +34,7 @@ class CheckoutService:
             total_price=total_price,
             order_status="placed",
             status="active",
-            createdby="system"
+            created_by="system"
         )
 
         self.db.add(order)

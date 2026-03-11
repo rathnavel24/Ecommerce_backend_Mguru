@@ -1,13 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.app.api.deps import get_db
-from app.app.api.deps import get_current_user
-
+from app.app.api.deps import get_db, role_required
 from app.app.Schemas.checkout_schema import CheckoutRequest
-
 from app.app.crud.order_service import CheckoutService
-
 
 router = APIRouter(prefix="/checkout", tags=["Checkout"])
 
@@ -16,11 +12,8 @@ router = APIRouter(prefix="/checkout", tags=["Checkout"])
 def checkout(
     data: CheckoutRequest,
     db: Session = Depends(get_db),
-    user = Depends(get_current_user)
+    user = Depends(role_required(["user", "admin", "merchant"]))
 ):
-
-    if user["role"] != "user":
-        raise Exception("Only users can place orders")
 
     return CheckoutService(db).checkout(
         user_id=user["user_id"],
