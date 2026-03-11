@@ -22,10 +22,11 @@ async def get_products(db: Session = Depends(get_db)):
 async def create_product(
     product_data: ProductCreate,
     db: Session = Depends(get_db),
-    user=Depends(role_required(["admin", "merchant"]))
+    user=Depends(role_required(["admin", "merchant"])),
+    user_id=Depends(get_current_user)
 ):
     try:
-        return ProductDetails(db, product_data).create_product()
+        return ProductDetails(db, product_data).create_product(user_id.get("role"))
     except Exception as e:
         raise e
 

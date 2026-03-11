@@ -3,18 +3,22 @@ from fastapi import HTTPException
 from app.app.models.ecommerce_order import EcommerceOrder
 from app.app.models.ecomerce_useraddress import EcommerceUserAddress
 
+
 class OrderDetails:
 
-    def __init__(self,db:Session,order_data):
-       self.db = db
-       self.order_data = order_data
+    def __init__(self, db: Session):
+        self.db = db
 
-# USER - Create Order
-    def create_order(db: Session, order, user_id: int):
 
-        address = db.query(EcommerceUserAddress).filter(
+    # USER - Create Order
+    def create_order(self, order, user_id: int, role: str):
+
+        if role != "user":
+            raise HTTPException(status_code=403, detail="Only user can create order")
+
+        address = self.db.query(EcommerceUserAddress).filter(
             EcommerceUserAddress.id == order.shipping_address,
-            # EcommerceUserAddress.user_id == user_id
+            EcommerceUserAddress.user_id == user_id
         ).first()
 
         if not address:
@@ -29,28 +33,34 @@ class OrderDetails:
             created_by="user"
         )
 
-        db.add(new_order)
-        db.commit()
-        db.refresh(new_order)
+        self.db.add(new_order)
+        self.db.commit()
+        self.db.refresh(new_order)
 
         return new_order
 
 
-    # USER - Get My Orders
-    def get_user_orders(db: Session, user_id: int):
+    # USER - Get Own Orders
+    def get_user_orders(self, user_id: int, role: str):
 
-        return db.query(EcommerceOrder).filter(
+        if role != "user":
+            raise HTTPException(status_code=403, detail="Only user can view own orders")
+
+        return self.db.query(EcommerceOrder).filter(
             EcommerceOrder.user_id == user_id,
             EcommerceOrder.status == "active"
         ).all()
 
 
     # USER - Get Single Order
-    def get_order(db: Session, order_id: int, user_id: int):
+    def get_order(self, order_id: int, user_id: int, role: str):
 
-        order = db.query(EcommerceOrder).filter(
+        if role != "user":
+            raise HTTPException(status_code=403, detail="Only user can view this order")
+
+        order = self.db.query(EcommerceOrder).filter(
             EcommerceOrder.order_id == order_id,
-            # EcommerceOrder.user_id == user_id
+            EcommerceOrder.user_id == user_id
         ).first()
 
         if not order:
@@ -60,43 +70,66 @@ class OrderDetails:
 
 
     # USER - Cancel Order
-    def cancel_order(db: Session, order_id: int, user_id: int):
+    def cancel_order(self, order_id: int, user_id: int, role: str):
 
-        order = db.query(EcommerceOrder).filter(
+        if role != "user":
+            raise HTTPException(status_code=403, detail="Only user can cancel order")
+
+        order = self.db.query(EcommerceOrder).filter(
             EcommerceOrder.order_id == order_id,
-            # EcommerceOrder.user_id == user_id
+            EcommerceOrder.user_id == user_id
         ).first()
 
         if not order:
             raise HTTPException(status_code=404, detail="Order not found")
 
+        if order.order_status in ["cancelled", "delivered"]:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Cannot cancel order with status {order.order_status}"
+            )
+
         order.order_status = "cancelled"
 
-        db.commit()
-        db.refresh(order)
+        self.db.commit()
+        self.db.refresh(order)
 
         return order
 
 
     # ADMIN - Get All Orders
-    def get_all_orders(db: Session):
+    def get_all_orders(self, role: str):
 
-        return db.query(EcommerceOrder).all()
+        if role != "admin":
+            raise HTTPException(status_code=403, detail="Admin access required")
+
+        return self.db.query(EcommerceOrder).all()
 
 
-    # ADMIN - Update Order Status
-    def update_order_status(db: Session, order_id: int, status: str):
+    # ADMIN / MERCHANT - Update Order Status
+    def update_order_status(self, order_id: int, status: str, role: str):
 
-        order = db.query(EcommerceOrder).filter(
+        if role not in ["admin", "merchant"]:
+            raise HTTPException(
+                status_code=403,
+                detail="Admin or Merchant access required"
+            )
+
+        order = self.db.query(EcommerceOrder).filter(
             EcommerceOrder.order_id == order_id
         ).first()
 
         if not order:
             raise HTTPException(status_code=404, detail="Order not found")
 
+        allowed_status = ["placed", "shipped", "delivered", "cancelled"]
+
+        if status not in allowed_status:
+            raise HTTPException(status_code=400, detail="Invalid order status")
+
         order.order_status = status
 
-        db.commit()
-        db.refresh(order)
+        self.db.commit()
+        self.db.refresh(order)
 
         return order

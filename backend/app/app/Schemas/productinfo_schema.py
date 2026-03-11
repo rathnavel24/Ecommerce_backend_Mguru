@@ -9,4 +9,4 @@ class ProductCreate(BaseModel):
     discount_per: Optional[Decimal] = None
     product_description: Optional[str] = None
     image_url: Optional[str] = None
-    status: Optional[str] = None
+    status: Optional[str] = "active"

@@ -32,7 +32,7 @@ class ProductDetails:
         return result
 
 
-    def create_product(self):
+    def create_product(self,user_id):
 
         new_product = EcommerceProductInfo(
             product_name = self.product_data.product_name,
@@ -40,7 +40,10 @@ class ProductDetails:
             price = self.product_data.product_price,
             discount_percent = self.product_data.discount_per,
             description = self.product_data.product_description,
-            image_url = self.product_data.image_url
+            image_url = self.product_data.image_url,
+            createdby = user_id,
+            status = self.product_data.status
+            
 
         )
         self.db.add(new_product)
