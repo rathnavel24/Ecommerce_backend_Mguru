@@ -1,92 +1,100 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.app.api.deps import get_db, get_current_user
-from app.app.crud import order_crud
+from app.app.api.deps import get_db, role_required
 from app.app.Schemas.order_schema import OrderCreate, OrderStatusUpdate
 from app.app.crud.order_crud import OrderDetails
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
 
 
-# USER APIs
-
-# User - Create Order
-@router.post("/user")
-def create_order(
+# USER - CREATE ORDER
+@router.post("/")
+def create_user_order(
     order: OrderCreate,
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
+    user=Depends(role_required(["user"]))
 ):
+    order_service = OrderDetails(db)
 
-    user_id = current_user["user_id"]
+    return order_service.create_order(
+        order,
+        user["user_id"],
+        user["role"]
+    )
 
-    return OrderDetails.create_order(db, order, user_id)
 
-
-# User - Get My Orders
-@router.get("/user/my")
+# USER - GET MY ORDERS
+@router.get("/my")
 def get_my_orders(
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
+    user=Depends(role_required(["user"]))
 ):
+    order_service = OrderDetails(db)
 
-    user_id = current_user["user_id"]
-
-    return OrderDetails.get_user_orders(db, user_id)
-
-
-# User - Get Single Order
-@router.get("/user/{order_id}")
-def get_order(
-    order_id: int,
-    db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
-):
-
-    user_id = current_user["user_id"]
-
-    return OrderDetails.get_order(db, order_id, user_id)
+    return order_service.get_user_orders(
+        user["user_id"],
+        user["role"]
+    )
 
 
-# User - Cancel Order
-@router.put("/user/{order_id}/cancel")
-def cancel_order(
-    order_id: int,
-    db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
-):
-
-    user_id = current_user["user_id"]
-
-    return OrderDetails.cancel_order(db, order_id, user_id)
-
-
-# ADMIN APIs
-
-# Admin - Get All Orders
-@router.get("/admin/all")
+# ADMIN - GET ALL ORDERS (MOVE THIS ABOVE)
+@router.get("/all")
 def get_all_orders(
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
+    user=Depends(role_required(["admin"]))
 ):
+    order_service = OrderDetails(db)
 
-    if current_user.get("type") != "admin":
-        raise HTTPException(status_code=403, detail="Admin access required")
+    return order_service.get_all_orders(
+        user["role"]
+    )
 
-    return OrderDetails.get_all_orders(db)
+
+# USER - GET SINGLE ORDER
+@router.get("/{order_id}")
+def get_single_order(
+    order_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(role_required(["user"]))
+):
+    order_service = OrderDetails(db)
+
+    return order_service.get_order(
+        order_id,
+        user["user_id"],
+        user["role"]
+    )
 
 
-# Admin - Update Order Status
-@router.put("/admin/{order_id}")
+# USER - CANCEL ORDER
+@router.put("/cancel/{order_id}")
+def cancel_user_order(
+    order_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(role_required(["user"]))
+):
+    order_service = OrderDetails(db)
+
+    return order_service.cancel_order(
+        order_id,
+        user["user_id"],
+        user["role"]
+    )
+
+
+# ADMIN / MERCHANT - UPDATE STATUS
+@router.put("/status/{order_id}")
 def update_order_status(
     order_id: int,
-    status: OrderStatusUpdate,
+    status_data: OrderStatusUpdate,
     db: Session = Depends(get_db),
-    current_user = Depends(get_current_user)
+    user=Depends(role_required(["admin", "merchant"]))
 ):
+    order_service = OrderDetails(db)
 
-    if current_user.get("type") != "admin":
-        raise HTTPException(status_code=403, detail="Admin access required")
-
-    return OrderDetails.update_order_status(db, order_id, status.order_status)
+    return order_service.update_order_status(
+        order_id,
+        status_data.order_status,
+        user["role"]
+    )
