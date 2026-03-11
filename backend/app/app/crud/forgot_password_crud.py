@@ -4,6 +4,7 @@ from app.app.core.security import generate_otp, generate_otp_key
 from datetime import datetime, timedelta
 from app.app.crud.otp_crud import otp_sent
 
+
 class ForgotPasswordCRUD:
 
     def __init__(self, db, email):
@@ -26,15 +27,16 @@ class ForgotPasswordCRUD:
             user_id=user.user_id,
             otp=otp,
             reset_key=reset_key,
-            expires_at=datetime.now() + timedelta(minutes=5),
-            is_used=False
+            expires_at=datetime.utcnow() + timedelta(minutes=5),
+            is_used=False,
+            otp_verified=False
         )
 
         self.db.add(otp_entry)
         self.db.commit()
 
         print(otp)
-        #otp_sent(user.email, otp)
+        # otp_sent(user.email, otp)
 
         return {
             "message": "OTP sent successfully",
