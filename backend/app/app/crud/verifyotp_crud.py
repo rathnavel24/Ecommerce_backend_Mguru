@@ -1,4 +1,5 @@
 from app.app.models.ecommerce_userotp import EcommerceUserOtp
+from app.app.models.ecommerce_user import Users
 from datetime import datetime
 from app.app.core.security import create_access_token
 
@@ -28,8 +29,13 @@ class VerifyOTPCRUD:
         otp_record.is_used = True
         self.db.commit()
 
+        user = self.db.query(Users).filter(
+            Users.user_id == otp_record.user_id
+        ).first()
+
         token = create_access_token(
-            data={"user_id": otp_record.user_id}
+            data={"user_id": otp_record.user_id,
+                  "role": user.type}
         )
 
         return {

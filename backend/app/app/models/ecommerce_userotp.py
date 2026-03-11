@@ -18,4 +18,8 @@ class EcommerceUserOtp(Base):
 
     is_used = Column(Boolean, default=False)
 
+    otp_verified = Column(Boolean,default=False)
+
     user = relationship("Users", back_populates="user_otp")
+
+    
