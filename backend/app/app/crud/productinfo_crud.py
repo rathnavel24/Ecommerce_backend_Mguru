@@ -9,11 +9,27 @@ class ProductDetails:
         self.product_data = product_data
 
     def get_all_products(self):
-        products = self.db.query(EcommerceProductInfo).filter(EcommerceProductInfo.status != "deleted").all()
+
+        products = self.db.query(EcommerceProductInfo)\
+            .filter(EcommerceProductInfo.status != "deleted")\
+            .all()
 
         if not products:
             raise HTTPException(status_code=404, detail="No products found")
-        return products
+
+        result = []
+
+        for product in products:
+
+            product_data = product.__dict__.copy()
+            product_data.pop("_sa_instance_state", None)
+
+            product_data["category_name"] = product.category.name
+            product_data.pop("categorie_id", None)
+
+            result.append(product_data)
+
+        return result
 
 
     def create_product(self):
