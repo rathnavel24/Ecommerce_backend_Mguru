@@ -40,10 +40,8 @@ class SignUpDetails(SignUpAbstract):
     def user_verification(self) -> bool: 
         user = self.db.query(Users).filter(
             or_(
-                Users.username == self.new_user.username,
+                #Users.username == self.new_user.username,
                 Users.email == self.new_user.email
-                
-
             ),
             Users.status == "active"
         ).first()

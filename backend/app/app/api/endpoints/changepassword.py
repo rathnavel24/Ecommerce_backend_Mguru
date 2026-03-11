@@ -15,7 +15,7 @@ async def change_password(data: ChangePassword,user=Depends(get_current_user),
 
     try:
 
-        user_id = user["user_id"]
+        user_id = user["user_ id"]
 
         return ChangePasswordCRUD(
             db,

@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 
-@router.post("/verify-otp")
+@router.post("/verify_otp")
 async def verify_otp(
     data: VerifyOtp,
     db: Session = Depends(get_db)
