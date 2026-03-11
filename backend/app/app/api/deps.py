@@ -38,6 +38,8 @@ def role_required(allowed_roles: list):
 
     def checker(user=Depends(get_current_user)):
 
+        role = user.get("role")
+
         if user["role"] not in allowed_roles:
             raise HTTPException(
                 status_code=403,
