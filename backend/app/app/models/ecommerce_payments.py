@@ -10,7 +10,7 @@ class EcommercePayments(Base):
     order_id = Column(Integer, ForeignKey("orders.order_id"))
     user_id  = Column(Integer, ForeignKey("users.user_id"))
 
-    transaction_id = Column(String(100))
+    transaction_id = Column(String(100),unique=True)
     payment_gateway = Column(String(100))
     amount = Column(DECIMAL(10,2))
 
