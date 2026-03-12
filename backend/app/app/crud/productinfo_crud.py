@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.app.models.ecommerce_productinfo import EcommerceProductInfo
+from app.app.models.ecommerce_categories import EcommerceCategories
+from sqlalchemy import func
 
 class ProductDetails:
 
@@ -42,9 +44,7 @@ class ProductDetails:
             description = self.product_data.product_description,
             image_url = self.product_data.image_url,
             createdby = user_id,
-            status = self.product_data.status
-            
-
+            status = self.product_data.status  
         )
         self.db.add(new_product)
         self.db.commit()
@@ -85,10 +85,49 @@ class ProductDetails:
         self.db.refresh(product)
 
         return{"message" : " Product Deleted Successfully"}
-        
+    
+
+    # def get_products_by_category(self, category_name: str):
+
+    #     products = self.db.query(EcommerceProductInfo).join(
+    #         EcommerceCategories,
+    #         EcommerceProductInfo.categorie_id == EcommerceCategories.categories_id
+    #     ).all()
+
+    #     return products
+
+    def get_products_by_category(self, category_name: str):
+
+        category_id = self.db.query(EcommerceCategories.categories_id).where(EcommerceCategories.name.like(category_name))
+
+        product = self.db.query(EcommerceProductInfo).filter(
+            EcommerceProductInfo.category.categories_id == category_id
+        ).first()
 
 
+        return product
+        '''
+        if not category:
+            raise HTTPException(status_code=404, detail="Category not found")
 
+        # get products using category id
+        products = self.db.query(EcommerceProductInfo).filter(
+            EcommerceProductInfo.categorie_id == category.categories_id,
+            EcommerceProductInfo.status != "deleted"
+        ).all()
 
+        if not products:
+            raise HTTPException(status_code=404, detail="No products found")
 
+        result = []
 
+        for product in products:
+            product_data = product.__dict__.copy()
+            product_data.pop("_sa_instance_state", None)
+            product_data["category_name"] = category.name
+            product_data.pop("categorie_id", None)
+
+            result.append(product_data)
+
+        return result
+        '''
