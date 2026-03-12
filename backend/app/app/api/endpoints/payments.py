@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.app.Schemas.payment_schema import PaymentCreate, PaymentUpdate
 from app.app.crud.payment_crud import PaymentsDetails
+from app.app.crud.payment_crud import GetUserPayments
 from app.app.api.deps import get_db
 from app.app.api.deps import role_required
 
@@ -9,7 +10,7 @@ from app.app.api.deps import role_required
 router = APIRouter(prefix="/payment", tags=["Payments"])
 
 # GET PAYMENTS (ADMIN + MERCHANT)
-@router.get("/all-payments")
+@router.get("/all_payments")
 async def get_payments(
     db: Session = Depends(get_db),
     user=Depends(role_required(["admin", "merchant"]))
@@ -17,7 +18,7 @@ async def get_payments(
     try:
         return PaymentsDetails(db, None).get_all_payments()
     except Exception as e:
-        raise e
+        return e
     
 
 
@@ -49,3 +50,13 @@ async def update_payment(
     except Exception as e:
         raise e
 
+
+@router.get("/my_payments")
+async def get_payments(
+    db: Session = Depends(get_db),
+    user = Depends(role_required(["user"]))
+):
+    try:
+        return GetUserPayments(db).get_user_payments(user.get("user_id"))
+    except Exception as e:
+        return e
