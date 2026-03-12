@@ -13,7 +13,7 @@ router = APIRouter(prefix="/inventory", tags=["Inventory"])
 @router.get("/all-products")
 async def get_products_inven(
     db: Session = Depends(get_db),
-    user=Depends(role_required(["admin", "merchant"]))
+    user=Depends(role_required(["admin", "merchant","user"]))
 ):
     try:
         return InventoryDetails(db, None).get_all_products_inven()
@@ -26,7 +26,7 @@ async def get_products_inven(
 async def create_inventory(
     inventory_data: InventoryCreate,
     db: Session = Depends(get_db),
-    user=Depends(role_required(["admin", "merchant"]))
+    user=Depends(role_required(["admin", "merchant","user"]))
 ):
     try:
         return InventoryDetails(db, inventory_data).create_inventory()
@@ -53,7 +53,7 @@ async def update_inventory(
 async def delete_inventory(
     inventory_id: int,
     db: Session = Depends(get_db),
-    user=Depends(role_required(["admin"]))
+    user=Depends(role_required(["admin","user"]))
 ):
     try:
         return InventoryDetails(db, None).delete_inventory(inventory_id)

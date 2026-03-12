@@ -27,7 +27,7 @@ def update_cart(
 
 
 # GET USER CART
-@router.get("/my-cart")
+@router.get("/my_cart")
 def get_cart(
     db: Session = Depends(get_db),
     user = Depends(get_current_user)

@@ -82,14 +82,23 @@ class CartDetails:
                 )
 
             inventory.reserved_quantity += diff
-
-            updated_cart.append(cart_item)
-
+            updated_cart.append(item.product_id)
+            
         self.db.commit()
 
+        cart = self.db.query(EcommerceCart).filter(EcommerceCart.user_id == user_id).all()
+
+        db_cart = [item.product_id for item in cart ]
+
+        to_delete = set(db_cart) - set(updated_cart)
+
+        self.remove_items(user_id,list(to_delete))
+
         return {
-            "msg" : "updated cart successfully" 
+            "msg" : "updated cart successfully",
         }
+    
+
     def remove_items(self, user_id: int, product_ids: list):
 
         for pid in product_ids:
