@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from starlette import status
 from app.app.models.ecommerce_inventory import EcommerceInventory
+
 
 
 class InventoryDetails:
@@ -20,6 +22,11 @@ class InventoryDetails:
     def create_inventory(self):
         if self.inventory_data.reserved_quantity > self.inventory_data.stock_quantity:
             raise HTTPException(status_code=400,detail="Reserved quantity cannot be greater than stock quantity")
+        
+        product_check = self.db.query(EcommerceInventory).filter(EcommerceInventory == self.inventory_data.product_id).first()
+
+        if not product_check:
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="cant create product already exist")
 
         new_inventory = EcommerceInventory(
             product_id = self.inventory_data.product_id,

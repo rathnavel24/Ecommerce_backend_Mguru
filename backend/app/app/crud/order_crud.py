@@ -107,7 +107,7 @@ class OrderDetails:
 
 
     # ADMIN / MERCHANT - Update Order Status
-    def update_order_status(self, order_id: int, status: str, role: str):
+    def update_order_status(self, order_id: int, role: str):
 
         if role not in ["admin", "merchant"]:
             raise HTTPException(
@@ -122,12 +122,23 @@ class OrderDetails:
         if not order:
             raise HTTPException(status_code=404, detail="Order not found")
 
-        allowed_status = ["placed", "shipped", "delivered", "cancelled"]
+        if order.order_status == "cancelled":
+            raise HTTPException(
+                status_code=400,
+                detail="Cancelled order cannot be updated"
+            )
 
-        if status not in allowed_status:
-            raise HTTPException(status_code=400, detail="Invalid order status")
+        if order.order_status == "placed":
+            order.order_status = "shipped"
 
-        order.order_status = status
+        elif order.order_status == "shipped":
+            order.order_status = "delivered"
+
+        elif order.order_status == "delivered":
+            raise HTTPException(
+                status_code=400,
+                detail="Order already delivered"
+            )
 
         self.db.commit()
         self.db.refresh(order)
