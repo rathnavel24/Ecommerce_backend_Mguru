@@ -2,6 +2,9 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.app.models.ecommerce_productinfo import EcommerceProductInfo
 
+
+import random
+
 class ProductDetails:
 
     def __init__(self, db: Session,product_data):
@@ -21,13 +24,27 @@ class ProductDetails:
 
         for product in products:
 
-            product_data = product.__dict__.copy()
-            product_data.pop("_sa_instance_state", None)
-
-            product_data["category_name"] = product.category.name
-            product_data.pop("categorie_id", None)
+            product_data = {
+                "price": product.price,
+                "status": product.status,
+                "discount_percent": product.discount_percent,
+                "createdat": product.createdat,
+                "description": product.description,
+                "updatedat": product.updatedat,
+                "image_url": product.image_url,
+                "createdby": product.createdby,
+                "sku": product.sku,
+                "product_name": product.product_name,
+                "rating": product.rating,
+                "product_id": product.product_id,
+                "total_reviews": product.total_reviews,
+                "tag": product.tag,
+                "category_name": product.category.name
+            }
 
             result.append(product_data)
+        random.seed(42)
+        random.shuffle(result)
 
         return result
 
@@ -85,6 +102,43 @@ class ProductDetails:
         self.db.refresh(product)
 
         return{"message" : " Product Deleted Successfully"}
+    
+    def popular_products(self):
+
+        popularproducts = self.db.query(EcommerceProductInfo)\
+            .filter(EcommerceProductInfo.status != "deleted")\
+            .order_by(EcommerceProductInfo.rating.desc()).limit(4)
+
+        if not popularproducts:
+            raise HTTPException(status_code=404, detail="No products found")
+
+        result = []
+
+        for product in popularproducts:
+
+            product_data = {
+                "price": product.price,
+                "status": product.status,
+                "discount_percent": product.discount_percent,
+                "createdat": product.createdat,
+                "description": product.description,
+                "updatedat": product.updatedat,
+                "image_url": product.image_url,
+                "createdby": product.createdby,
+                "sku": product.sku,
+                "product_name": product.product_name,
+                "rating": product.rating,
+                "product_id": product.product_id,
+                "total_reviews": product.total_reviews,
+                "tag": product.tag,
+                "category_name": product.category.name
+            }
+
+            result.append(product_data)
+
+        random.shuffle(result)
+
+        return result
         
 
 

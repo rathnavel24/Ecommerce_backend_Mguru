@@ -56,3 +56,12 @@ async def delete_product(
         return ProductDetails(db, None).delete_product(product_id)
     except Exception as e:
         raise e
+
+@router.get("/get_popular_products")
+def get_popular_products(db: Session = Depends(get_db)):
+    try:
+        return ProductDetails(db, None).popular_products()
+    except Exception as e:
+        raise e
+
+

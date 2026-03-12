@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from app.app.models.ecommerce_cart import EcommerceCart
 from app.app.models.ecommerce_inventory import EcommerceInventory
 from app.app.models.ecommerce_productinfo import EcommerceProductInfo
-
+from app.app.models.ecommerce_categories import EcommerceCategories
 
 class CartDetails:
 
@@ -12,24 +12,38 @@ class CartDetails:
 
     def get_cart(self, user_id: int):
 
-        cart_items = self.db.query(EcommerceCart).filter(
+        cart_items = (self.db.query(EcommerceCart,
+                EcommerceProductInfo,
+                EcommerceCategories.name.label("category")).filter(
             EcommerceCart.user_id == user_id,
             EcommerceCart.status == "active"
+        ).join(EcommerceProductInfo,
+            EcommerceCart.product_id == EcommerceProductInfo.product_id
+        ).join(EcommerceCategories,
+            EcommerceProductInfo.categorie_id == EcommerceCategories.categories_id
         ).all()
+        )
 
         if not cart_items:
             raise HTTPException(status_code=404, detail="Cart is empty")
 
         result = []
 
-        for item in cart_items:
+        for cart, productinfo, category in cart_items:
 
-            data = item.__dict__.copy()
-            data.pop("_sa_instance_state", None)
-
-            result.append(data)
+            result.append({
+                "user_id": cart.user_id,
+                "product_id": cart.product_id,
+                "product_name" : productinfo.product_name,
+                "quantity": cart.quantity,
+                "image_url": productinfo.image_url,
+                "category": category,
+                "price" : productinfo.price,
+                "discount_percent" : productinfo.discount_percent
+            })
 
         return result
+    
     def update_cart(self, user_id: int, items: list):
 
         updated_cart = []
