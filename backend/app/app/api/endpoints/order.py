@@ -87,7 +87,6 @@ def cancel_user_order(
 @router.put("/status/{order_id}")
 def update_order_status(
     order_id: int,
-    status_data: OrderStatusUpdate,
     db: Session = Depends(get_db),
     user=Depends(role_required(["admin", "merchant"]))
 ):
@@ -95,6 +94,5 @@ def update_order_status(
 
     return order_service.update_order_status(
         order_id,
-        status_data.order_status,
         user["role"]
     )
