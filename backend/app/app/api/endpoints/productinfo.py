@@ -9,7 +9,7 @@ router = APIRouter(prefix="/products", tags=["Products"])
 
 
 # GET ALL PRODUCTS (PUBLIC / ANY USER)
-@router.get("/all-products")
+@router.get("/all_products")
 async def get_products(db: Session = Depends(get_db)):
     try:
         return ProductDetails(db, None).get_all_products()

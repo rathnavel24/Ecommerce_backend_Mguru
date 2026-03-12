@@ -17,6 +17,9 @@ from app.app.api.endpoints import verify_forgot_otp
 from app.app.api.endpoints import set_new_password
 from app.app.api.endpoints import payments
 
+from app.app.api.endpoints import cart
+from app.app.api.endpoints import checkout
+from app.app.api.endpoints import orderitems
 
 app = FastAPI()
 
@@ -47,3 +50,6 @@ app.include_router(changepassword.router)
 app.include_router(getuserinfo.router)
 app.include_router(resendotp.router)
 app.include_router(payments.router)
+app.include_router(cart.router)
+app.include_router(checkout.router)
+app.include_router(orderitems.router)

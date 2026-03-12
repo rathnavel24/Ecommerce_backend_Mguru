@@ -39,6 +39,6 @@ class VerifyOTPCRUD:
         )
 
         return {
-            "access_token": token,
+            "token": token,
             "token_type": "bearer"
         }
