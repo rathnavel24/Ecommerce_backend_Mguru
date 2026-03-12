@@ -2,6 +2,7 @@ from app.app.db.base import Base
 from sqlalchemy import Column,String,TIMESTAMP,Integer,func,DECIMAL,Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
+
 class EcommercePayments(Base):
     __tablename__ = 'payments'
 
