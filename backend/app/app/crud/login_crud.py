@@ -45,7 +45,7 @@ class LoginUser:
             #otp_sent(user.email, otp)
             print(otp)
             return {
-                "message": "OTP sent",
+                "timer": 600,
                 "otp_key": otp_key
             }
 
