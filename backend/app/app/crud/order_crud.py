@@ -30,7 +30,7 @@ class OrderDetails:
             total_price=order.total_price,
             order_status="placed",
             status="active",
-            created_by="user"
+            created_by=role
         )
 
         self.db.add(new_order)
@@ -139,7 +139,7 @@ class OrderDetails:
                 status_code=400,
                 detail="Order already delivered"
             )
-
+        order.created_by = role
         self.db.commit()
         self.db.refresh(order)
 
