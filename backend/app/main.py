@@ -15,6 +15,7 @@ from app.app.api.endpoints import resendotp
 from app.app.api.endpoints import forgot_password
 from app.app.api.endpoints import verify_forgot_otp
 from app.app.api.endpoints import set_new_password
+from app.app.api.endpoints import payments
 
 
 app = FastAPI()
@@ -45,3 +46,4 @@ app.include_router(inventory.router)
 app.include_router(changepassword.router)
 app.include_router(getuserinfo.router)
 app.include_router(resendotp.router)
+app.include_router(payments.router)
