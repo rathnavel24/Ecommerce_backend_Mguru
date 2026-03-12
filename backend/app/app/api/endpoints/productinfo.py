@@ -16,23 +16,13 @@ async def get_products(db: Session = Depends(get_db)):
     except Exception as e:
         raise e
 
-@router.get("/{category_name}")
-async def get_category(category_name: str, db: Session = Depends(get_db)):
-    try:
-        return ProductDetails(db, None).get_products_by_category(category_name)
+@router.get("/products/category/{category_id}")
+def get_products_by_category(category_id: int, db: Session = Depends(get_db)):
+    return ProductDetails(db, None).get_products_by_category(category_id)
 
-    except Exception as e:
-        raise e
-
-@router.get("/by-category")
-async def get_products_by_category(category_name: str, db: Session = Depends(get_db)):
-    try:
-        return ProductDetails(db, None).get_products_by_category(category_name)
-    except Exception as e:
-        raise e
     
 # CREATE PRODUCT (ADMIN + MERCHANT)
-@router.post("/create-product")
+@router.post("/create_product")
 async def create_product(
     product_data: ProductCreate,
     db: Session = Depends(get_db),
@@ -71,6 +61,7 @@ async def delete_product(
     except Exception as e:
         raise e
 
+# POPULAR PRODUCTS
 @router.get("/get_popular_products")
 def get_popular_products(db: Session = Depends(get_db)):
     try:

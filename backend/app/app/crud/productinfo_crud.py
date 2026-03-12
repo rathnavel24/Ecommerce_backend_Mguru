@@ -103,7 +103,6 @@ class ProductDetails:
 
         return{"message" : " Product Deleted Successfully"}
     
-<<<<<<< HEAD
     def popular_products(self):
 
         popularproducts = self.db.query(EcommerceProductInfo)\
@@ -141,37 +140,13 @@ class ProductDetails:
 
         return result
         
-=======
 
-    # def get_products_by_category(self, category_name: str):
+    def get_products_by_category(self, category_id: int):
 
-    #     products = self.db.query(EcommerceProductInfo).join(
-    #         EcommerceCategories,
-    #         EcommerceProductInfo.categorie_id == EcommerceCategories.categories_id
-    #     ).all()
-
-    #     return products
-
-    def get_products_by_category(self, category_name: str):
-
-        category_id = self.db.query(EcommerceCategories.categories_id).where(EcommerceCategories.name.like(category_name))
-
-        product = self.db.query(EcommerceProductInfo).filter(
-            EcommerceProductInfo.category.categories_id == category_id
-        ).first()
->>>>>>> a50a437b5b9b5ec1ee0dfa0506828880bd82ca3a
-
-
-        return product
-        '''
-        if not category:
-            raise HTTPException(status_code=404, detail="Category not found")
-
-        # get products using category id
-        products = self.db.query(EcommerceProductInfo).filter(
-            EcommerceProductInfo.categorie_id == category.categories_id,
-            EcommerceProductInfo.status != "deleted"
-        ).all()
+        products = self.db.query(EcommerceProductInfo)\
+            .filter(EcommerceProductInfo.categorie_id == category_id)\
+            .filter(EcommerceProductInfo.status != "deleted")\
+            .all()
 
         if not products:
             raise HTTPException(status_code=404, detail="No products found")
@@ -179,12 +154,25 @@ class ProductDetails:
         result = []
 
         for product in products:
-            product_data = product.__dict__.copy()
-            product_data.pop("_sa_instance_state", None)
-            product_data["category_name"] = category.name
-            product_data.pop("categorie_id", None)
+
+            product_data = {
+                "price": product.price,
+                "status": product.status,
+                "discount_percent": product.discount_percent,
+                "createdat": product.createdat,
+                "description": product.description,
+                "updatedat": product.updatedat,
+                "image_url": product.image_url,
+                "createdby": product.createdby,
+                "sku": product.sku,
+                "product_name": product.product_name,
+                "rating": product.rating,
+                "product_id": product.product_id,
+                "total_reviews": product.total_reviews,
+                "tag": product.tag,
+                "category_name": product.category.name
+            }
 
             result.append(product_data)
 
         return result
-        '''
