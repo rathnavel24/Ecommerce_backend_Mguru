@@ -214,10 +214,5 @@ class ProductDetails:
                 raise HTTPException(status_code=404, detail="No products found")
         return products
        
-    #    result=[]
-       
-    #    for product in products:
-    #        result.append(product)
-           
-    #    return result
+    
        
