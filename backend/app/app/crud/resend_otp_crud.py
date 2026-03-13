@@ -39,5 +39,5 @@ class ResendOTPCRUD:
         print(new_otp)
 
         return {
-            "message": "OTP resent successfully"
+            "timer": 600
         }

@@ -22,6 +22,7 @@ class EcommerceProductInfo(Base):
     sku = Column(String(100), unique=True, default=generate_sku)
     rating = Column(DECIMAL(10,2))
     total_reviews = Column(Integer)
+    tag = Column(String(45))
     status = Column(Enum('active','inactive','deleted'))
     createdat = Column(TIMESTAMP, default=func.now())
     updatedat = Column(TIMESTAMP, default=None, onupdate=func.now())
