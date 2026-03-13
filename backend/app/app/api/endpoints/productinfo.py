@@ -17,8 +17,10 @@ async def get_products(db: Session = Depends(get_db)):
         raise e
 
 
+
+
 # CREATE PRODUCT (ADMIN + MERCHANT)
-@router.post("/create-product")
+@router.post("/create_product")
 async def create_product(
     product_data: ProductCreate,
     db: Session = Depends(get_db),
@@ -30,6 +32,15 @@ async def create_product(
     except Exception as e:
         raise e
 
+@router.post("/product_id/{id}")
+async def create_product(
+    id: int,
+    db: Session = Depends(get_db)
+):
+    try:
+        return ProductDetails(db, None).get_product_by_productid(id)
+    except Exception as e:
+        raise e
 
 # UPDATE PRODUCT (ADMIN + MERCHANT)
 @router.put("/update/")
