@@ -176,3 +176,30 @@ class ProductDetails:
             result.append(product_data)
 
         return result
+    def get_product_by_productid(self,id):
+            product = self.db.query(EcommerceProductInfo)\
+                .filter(EcommerceProductInfo.product_id == id)\
+                .filter(EcommerceProductInfo.status != "deleted")\
+                .first()
+            if not product:
+                raise HTTPException(status_code=404, detail="No products found")
+            
+            product = {
+                    "price": product.price,
+                    "status": product.status,
+                    "discount_percent": product.discount_percent,
+                    "createdat": product.createdat,
+                    "description": product.description,
+                    "updatedat": product.updatedat,
+                    "image_url": product.image_url,
+                    "createdby": product.createdby,
+                    "sku": product.sku,
+                    "product_name": product.product_name,
+                    "rating": product.rating,
+                    "product_id": product.product_id,
+                    "total_reviews": product.total_reviews,
+                    "tag": product.tag,
+                    "category_name": product.category.name
+                }
+            
+            return product

@@ -20,6 +20,10 @@ async def get_products(db: Session = Depends(get_db)):
 def get_products_by_category(category_id: int, db: Session = Depends(get_db)):
     return ProductDetails(db, None).get_products_by_category(category_id)
 
+@router.get("/products/{product_id}")
+def get_products_by_category(product_id: int, db: Session = Depends(get_db)):
+    return ProductDetails(db, None).get_product_by_productid(product_id)
+
     
 # CREATE PRODUCT (ADMIN + MERCHANT)
 @router.post("/create_product")
