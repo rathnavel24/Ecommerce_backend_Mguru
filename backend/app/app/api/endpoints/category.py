@@ -13,8 +13,7 @@ router = APIRouter(prefix="/category", tags=["Category"])
 # GET ALL CATEGORIES (Public / Any logged user)
 @router.get("/all")
 async def get_category(
-    db: Session = Depends(get_db),
-    user = Depends(get_current_user)
+    db: Session = Depends(get_db)
 ):
     return get_all_categories(db)
 
