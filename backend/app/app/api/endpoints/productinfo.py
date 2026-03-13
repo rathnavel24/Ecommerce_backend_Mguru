@@ -72,5 +72,11 @@ def get_popular_products(db: Session = Depends(get_db)):
         return ProductDetails(db, None).popular_products()
     except Exception as e:
         raise e
+    
+
+@router.get("/search_products")
+def prod_search(product_name:str,db:Session=Depends(get_db)):
+    product = ProductDetails(db,None).search_products(product_name)    
+    return product      
 
 

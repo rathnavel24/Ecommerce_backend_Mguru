@@ -203,3 +203,21 @@ class ProductDetails:
                 }
             
             return product
+    
+
+    def search_products(self, product_name: str):
+        products = self.db.query(EcommerceProductInfo)\
+           .filter(EcommerceProductInfo.product_name.ilike(f"%{product_name}%"))\
+           .filter(EcommerceProductInfo.status != "deleted")\
+           .all()
+        if not products:
+                raise HTTPException(status_code=404, detail="No products found")
+        return products
+       
+    #    result=[]
+       
+    #    for product in products:
+    #        result.append(product)
+           
+    #    return result
+       

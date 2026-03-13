@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.app.api.deps import get_db, role_required
 from app.app.Schemas.order_schema import OrderCreate, OrderStatusUpdate
 from app.app.crud.order_crud import OrderDetails
+from app.app.crud.productinfo_crud import ProductDetails
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
 
@@ -96,3 +97,5 @@ def update_order_status(
         order_id,
         user["role"]
     )
+
+   
