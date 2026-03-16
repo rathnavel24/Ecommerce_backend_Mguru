@@ -11,3 +11,5 @@ XlsxWriter>=3.2
 python-multipart>=0.0.9
 pydantic[email]
 pymysql
+cloudinary
+python-multipart
