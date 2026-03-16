@@ -13,13 +13,11 @@ class ProductCreate(BaseModel):
     image_url: Optional[str] = None
     status: Optional[str] = "active"
 
-
-class UpdateProduct(BaseModel):
+class ProductUpdate(BaseModel):
     product_name: Optional[str] = None
     category_id: Optional[int] = None
     product_price: Optional[Decimal] = None
     discount_per: Optional[Decimal] = None
     product_description: Optional[str] = None
     image_url: Optional[str] = None
-    status: Optional[Enum] = None
-    
+    status: Optional[str] = None

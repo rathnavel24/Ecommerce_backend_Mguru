@@ -54,14 +54,14 @@ class ProductDetails:
     def create_product(self,user_id):
 
         new_product = EcommerceProductInfo(
-            product_name = self.product_data.product_name,
-            categorie_id = self.product_data.category_id,
-            price = self.product_data.product_price,
-            discount_percent = self.product_data.discount_per,
-            description = self.product_data.product_description,
-            image_url = self.product_data.image_url,
+            product_name = self.product_data.get("product_name"),
+            categorie_id = self.product_data.get("categorie_id"),
+            price = self.product_data.get("price"),
+            discount_percent = self.product_data.get("discount_percent"),
+            description = self.product_data.get("description"),
+            image_url = self.product_data.get("image_url"),
             createdby = user_id,
-            status = self.product_data.status  
+            status = self.product_data.get("status")  
         )
         self.db.add(new_product)
         self.db.commit()
@@ -70,27 +70,32 @@ class ProductDetails:
             "msg" : "Product Created Successfully"
         }
     
-    def update_product(self,productt_id:int):
+    def update_product(self, product_id: int):
 
-        product = self.db.query(EcommerceProductInfo).filter(EcommerceProductInfo.product_id == productt_id).first()
+        product = self.db.query(EcommerceProductInfo)\
+            .filter(EcommerceProductInfo.product_id == product_id)\
+            .first()
 
         if not product:
             raise HTTPException(status_code=404, detail="Product not found")
-        
-        product.product_name = self.product_data.product_name
-        product.categorie_id = self.product_data.category_id
-        product.price = self.product_data.product_price
-        product.discount_percent = self.product_data.discount_per
-        product.description = self.product_data.product_description
-        product.image_url = self.product_data.image_url
-        product.status = self.product_data.status
+
+        update_data = self.product_data.dict(exclude_unset=True)
+
+        field_map = {
+            "product_price": "price",
+            "category_id": "categorie_id",
+            "product_description": "description",
+            "discount_per": "discount_percent"
+        }
+
+        for key, value in update_data.items():
+            db_field = field_map.get(key, key)
+            setattr(product, db_field, value)
 
         self.db.commit()
         self.db.refresh(product)
-        return{
-            "msg" : "Product Updated Successfully"
-        }
-        
+
+        return {"msg": "Product Updated Successfully"}
     
     def delete_product(self,producttt_id = int):
         product = self.db.query(EcommerceProductInfo).filter(EcommerceProductInfo.product_id == producttt_id).first()
@@ -176,6 +181,7 @@ class ProductDetails:
 
             result.append(product_data)
 
+
         return result
     def get_product_by_productid(self,id):
             product = self.db.query(EcommerceProductInfo)\
@@ -204,16 +210,60 @@ class ProductDetails:
                 }
             
             return product
+
+    def get_merchant_products(self, user_id):
+
+        products = self.db.query(EcommerceProductInfo)\
+            .filter(EcommerceProductInfo.createdby == user_id)\
+            .filter(EcommerceProductInfo.status != "deleted")\
+            .all()
+
+        if not products:
+            raise HTTPException(status_code=404, detail="No products found")
+
+        result = []
+
+        for product in products:
+            product_data = {
+                "price": product.price,
+                "status": product.status,
+                "discount_percent": product.discount_percent,
+                "createdat": product.createdat,
+                "description": product.description,
+                "updatedat": product.updatedat,
+                "image_url": product.image_url,
+                "createdby": product.createdby,
+                "sku": product.sku,
+                "product_name": product.product_name,
+                "rating": product.rating,
+                "product_id": product.product_id,
+                "total_reviews": product.total_reviews,
+                "tag": product.tag,
+                "category_name": product.category.name
+            }
+
+            result.append(product_data)
+
+        return result
     
 
     def search_products(self, product_name: str):
-        products = self.db.query(EcommerceProductInfo)\
+        products = self.db.query(EcommerceProductInfo.product_id,EcommerceProductInfo.product_name)\
            .filter(EcommerceProductInfo.product_name.ilike(f"%{product_name}%"))\
            .filter(EcommerceProductInfo.status != "deleted")\
-           .all()
+           .limit(10).all()
         if not products:
                 raise HTTPException(status_code=404, detail="No products found")
-        return products
+        
+        result = []
+
+        for product in products:
+            result.append({
+                "product_id" : product.product_id,
+                "product_name" : product.product_name
+                
+            })
+        return result
        
     
        
