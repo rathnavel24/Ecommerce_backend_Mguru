@@ -25,7 +25,8 @@ async def create_new_category(
     db: Session = Depends(get_db),
     user = Depends(role_required(["admin"]))
 ):
-    return Category_Create(db, data)
+    user_id = user.get("user_id")
+    return Category_Create(db, data,user_id)
 
 
 # UPDATE CATEGORY (ADMIN ONLY)

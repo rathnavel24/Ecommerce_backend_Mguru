@@ -70,4 +70,6 @@ class CheckoutService:
 
         self.db.commit()
 
-        return order
+        return {
+            "msg" : "order placed successfully"
+        }

@@ -106,9 +106,9 @@ async def get_my_products(
     current_user = Depends(get_current_user)
 ):
     try:
-        user_id = current_user.get("role")
+        user_id = current_user.get("user_id")
 
-        return ProductDetails(db, None).get_merchant_products(user_id)
+        return ProductDetails(db, None).get_merchant_products(str(user_id))
 
     except Exception as e:
         raise e
