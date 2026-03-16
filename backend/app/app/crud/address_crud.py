@@ -44,7 +44,8 @@ def get_user_by_id(db: Session, user_id: int):
 
 
 # UPDATE ADDRESS (PARTIAL UPDATE)
-def update_address(db: Session, user_id: int, data: UpdateAddress):
+def update_address(db: 
+    Session, user_id: int, data: UpdateAddress):
 
     address = db.query(EcommerceUserAddress).filter(
         EcommerceUserAddress.user_id == user_id

@@ -10,3 +10,12 @@ class ProductCreate(BaseModel):
     product_description: Optional[str] = None
     image_url: Optional[str] = None
     status: Optional[str] = "active"
+
+class ProductUpdate(BaseModel):
+    product_name: Optional[str] = None
+    category_id: Optional[int] = None
+    product_price: Optional[Decimal] = None
+    discount_per: Optional[Decimal] = None
+    product_description: Optional[str] = None
+    image_url: Optional[str] = None
+    status: Optional[str] = None
