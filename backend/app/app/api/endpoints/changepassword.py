@@ -9,7 +9,7 @@ from app.app.api.deps import get_db
 router = APIRouter()
 
 
-@router.post("/change-password")
+@router.post("/change_password")
 async def change_password(data: ChangePassword,user=Depends(get_current_user),
                           db: Session = Depends(get_db)):
 
