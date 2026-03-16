@@ -74,3 +74,16 @@ def get_popular_products(db: Session = Depends(get_db)):
         raise e
 
 
+@router.get("/merchant/my_products")
+async def get_my_products(
+    db: Session = Depends(get_db),
+    user = Depends(role_required(["merchant","admin"])),
+    current_user = Depends(get_current_user)
+):
+    try:
+        user_id = current_user.get("role")
+
+        return ProductDetails(db, None).get_merchant_products(user_id)
+
+    except Exception as e:
+        raise e
