@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.app.Schemas.productinfo_schema import ProductCreate
+from app.app.Schemas.productinfo_schema import ProductCreate,UpdateProduct
 from app.app.crud.productinfo_crud import ProductDetails
 from app.app.api.deps import get_db
 from app.app.api.deps import get_current_user
@@ -43,7 +43,7 @@ async def create_product(
 @router.put("/update/")
 async def update_product(
     product_id: int,
-    product_data: ProductCreate,
+    product: UpdateProduct,
     db: Session = Depends(get_db),
     user=Depends(role_required(["admin", "merchant"]))
 ):
@@ -51,6 +51,7 @@ async def update_product(
         return ProductDetails(db, product_data).update_product(product_id)
     except Exception as e:
         raise e
+
 
 
 # DELETE PRODUCT (ADMIN ONLY)

@@ -90,6 +90,7 @@ class ProductDetails:
         return{
             "msg" : "Product Updated Successfully"
         }
+        
     
     def delete_product(self,producttt_id = int):
         product = self.db.query(EcommerceProductInfo).filter(EcommerceProductInfo.product_id == producttt_id).first()

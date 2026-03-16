@@ -30,9 +30,9 @@ def get_my_addresses(db: Session = Depends(get_db),user=Depends(role_required(["
 
 
 # UPDATE ADDRESS
-@router.put("/update_address")
-def update_user_address(data: UpdateAddress,db: Session = Depends(get_db),user=Depends(role_required(["user"]))):
-    return update_address(db, user["user_id"], data)
+@router.put("/update/{address_id}")
+def update_user_address(address_id: int, data: UpdateAddress, db:Session = Depends(get_db),user=Depends(role_required(["user"]))):
+    return update_address(db, address_id, user["user_id"], data)
 
 
 # DELETE ADDRESS
