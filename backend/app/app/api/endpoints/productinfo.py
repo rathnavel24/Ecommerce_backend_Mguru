@@ -1,10 +1,15 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, File, Form, UploadFile, HTTPException
 from sqlalchemy.orm import Session
 from app.app.Schemas.productinfo_schema import ProductCreate
 from app.app.crud.productinfo_crud import ProductDetails
 from app.app.api.deps import get_db
 from app.app.api.deps import get_current_user
 from app.app.api.deps import role_required
+from app.app.crud.image_services import upload_image
+
+from fastapi import APIRouter
+from sqlalchemy.orm import Session
+from decimal import Decimal
 router = APIRouter(prefix="/products", tags=["Products"])
 
 
@@ -28,16 +33,33 @@ def get_products_by_category(product_id: int, db: Session = Depends(get_db)):
 # CREATE PRODUCT (ADMIN + MERCHANT)
 @router.post("/create_product")
 async def create_product(
-    product_data: ProductCreate,
+    product_name: str = Form(...),
+    category_id: int = Form(...),
+    product_price: Decimal = Form(...),
+    discount_per: Decimal | None = Form(None),
+    product_description: str | None = Form(None),
+    status: str = Form("active"),
+    image: UploadFile = File(...),
     db: Session = Depends(get_db),
     user=Depends(role_required(["admin", "merchant"])),
     user_id=Depends(get_current_user)
 ):
     try:
-        return ProductDetails(db, product_data).create_product(user_id.get("role"))
+       image_url = upload_image(image)
+       product_dict = {
+            "product_name" : product_name,
+            "categorie_id" : category_id,
+            "price" : product_price,
+            "discount_percent" : discount_per,
+            "description" : product_description,
+            "image_url" : image_url,
+            "createdby" : user_id,
+            "status" : status  
+       }
+       return ProductDetails(db, product_dict).create_product(user_id.get("user_id"))
+    
     except Exception as e:
-        raise e
-
+        raise HTTPException(status_code=500, detail=str(e))
 
 # UPDATE PRODUCT (ADMIN + MERCHANT)
 @router.put("/update/")
