@@ -4,7 +4,7 @@ from app.app.Schemas.categories_schema import CategoryCreate, CategoryUpdate
 from  fastapi import HTTPException
 
 
-def Category_Create(db: Session, category: CategoryCreate,user_id):
+def Category_Create(db: Session, category: CategoryCreate, user_id):
 
     if category.parent_id is not None:
         parent = db.query(EcommerceCategories).filter(
@@ -18,6 +18,7 @@ def Category_Create(db: Session, category: CategoryCreate,user_id):
         name=category.name,
         parent_id=category.parent_id,
         status=category.status,
+        image_url=category.image_url,
         created_by=str(user_id)
     )
 
