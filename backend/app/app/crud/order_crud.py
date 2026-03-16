@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.app.models.ecommerce_order import EcommerceOrder
 from app.app.models.ecomerce_useraddress import EcommerceUserAddress
+from app.app.models.ecommerce_order import EcommerceOrder
 
 
 class OrderDetails:
@@ -38,6 +39,7 @@ class OrderDetails:
         self.db.refresh(new_order)
 
         return new_order
+
 
 
     # USER - Get Own Orders
@@ -144,3 +146,7 @@ class OrderDetails:
         self.db.refresh(order)
 
         return order
+    
+
+    
+        

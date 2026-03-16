@@ -16,7 +16,6 @@ from app.app.api.endpoints import forgot_password
 from app.app.api.endpoints import verify_forgot_otp
 from app.app.api.endpoints import set_new_password
 from app.app.api.endpoints import payments
-
 from app.app.api.endpoints import cart
 from app.app.api.endpoints import checkout
 from app.app.api.endpoints import orderitems

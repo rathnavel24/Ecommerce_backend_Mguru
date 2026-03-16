@@ -12,7 +12,7 @@ router = APIRouter(prefix="/address", tags=["Address"])
 
 
 # CREATE ADDRESS (USER ONLY)
-@router.post("/")
+@router.post("/create_address")
 def create_user_address(data: CreateAddress,db: Session = Depends(get_db),user=Depends(role_required(["user"]))):
     return create_address(db, data, user["user_id"])
 
@@ -30,7 +30,7 @@ def get_my_addresses(db: Session = Depends(get_db),user=Depends(role_required(["
 
 
 # UPDATE ADDRESS
-@router.put("/")
+@router.put("/update_address")
 def update_user_address(data: UpdateAddress,db: Session = Depends(get_db),user=Depends(role_required(["user"]))):
     return update_address(db, user["user_id"], data)
 

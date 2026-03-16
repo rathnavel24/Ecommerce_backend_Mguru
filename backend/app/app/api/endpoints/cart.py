@@ -32,8 +32,10 @@ def get_cart(
     db: Session = Depends(get_db),
     user = Depends(get_current_user)
 ):
-
-    return CartDetails(db).get_cart(user["user_id"])
+    try:
+        return CartDetails(db).get_cart(user["user_id"])
+    except Exception as e:
+        raise e
 
 
 # REMOVE ITEMS FROM CART
