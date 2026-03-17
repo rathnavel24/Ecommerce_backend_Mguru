@@ -29,7 +29,12 @@ def get_products_by_category(category_id: int, db: Session = Depends(get_db)):
 def get_products_by_category(product_id: int, db: Session = Depends(get_db)):
     return ProductDetails(db, None).get_product_by_productid(product_id)
 
+<<<<<<< HEAD
+
+
+=======
     
+>>>>>>> dev
 # CREATE PRODUCT (ADMIN + MERCHANT)
 @router.post("/create_product")
 async def create_product(
@@ -59,7 +64,21 @@ async def create_product(
        return ProductDetails(db, product_dict).create_product(user_id.get("user_id"))
     
     except Exception as e:
+<<<<<<< HEAD
+        raise e
+
+@router.post("/product_id/{id}")
+async def create_product(
+    id: int,
+    db: Session = Depends(get_db)
+):
+    try:
+        return ProductDetails(db, None).get_product_by_productid(id)
+    except Exception as e:
+        raise e
+=======
         raise HTTPException(status_code=500, detail=str(e))
+>>>>>>> dev
 
 # UPDATE PRODUCT (ADMIN + MERCHANT)
 @router.put("/update/{product_id}")
