@@ -44,18 +44,17 @@ def get_user_by_id(db: Session, user_id: int):
 
 
 # UPDATE ADDRESS (PARTIAL UPDATE)
-def update_address(db: Session, user_id: int, data: UpdateAddress):
+def update_address(db: Session, address_id: int, user_id: int, data: UpdateAddress):
 
     address = db.query(EcommerceUserAddress).filter(
+        EcommerceUserAddress.id == address_id,
         EcommerceUserAddress.user_id == user_id
     ).first()
 
     if not address:
         raise HTTPException(status_code=404, detail="Address not found")
 
-    update_data = data.dict(exclude_unset=True)
-
-    for key, value in update_data.items():
+    for key, value in data.dict(exclude_unset=True).items():
         setattr(address, key, value)
 
     db.commit()
