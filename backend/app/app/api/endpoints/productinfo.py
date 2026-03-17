@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, File, Form, UploadFile, HTTPException
 from sqlalchemy.orm import Session
-from app.app.Schemas.productinfo_schema import ProductCreate
+from app.app.Schemas.productinfo_schema import ProductCreate,ProductUpdate
 from app.app.crud.productinfo_crud import ProductDetails
 from app.app.api.deps import get_db
 from app.app.api.deps import get_current_user
@@ -62,17 +62,15 @@ async def create_product(
         raise HTTPException(status_code=500, detail=str(e))
 
 # UPDATE PRODUCT (ADMIN + MERCHANT)
-@router.put("/update/")
+@router.put("/update/{product_id}")
 async def update_product(
     product_id: int,
-    product_data: ProductCreate,
+    product_data: ProductUpdate,
     db: Session = Depends(get_db),
-    user=Depends(role_required(["admin", "merchant"]))
+    user=Depends(role_required(["admin","merchant"]))
 ):
-    try:
-        return ProductDetails(db, product_data).update_product(product_id)
-    except Exception as e:
-        raise e
+    return ProductDetails(db, product_data).update_product(product_id)
+
 
 
 # DELETE PRODUCT (ADMIN ONLY)
