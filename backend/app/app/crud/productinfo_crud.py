@@ -183,10 +183,6 @@ class ProductDetails:
 
 
         return result
-<<<<<<< HEAD
-    
-=======
->>>>>>> 321846c5e0ea38083b5d7c6b6130517d2f0f2b70
     def get_product_by_productid(self,id):
             product = self.db.query(EcommerceProductInfo)\
                 .filter(EcommerceProductInfo.product_id == id)\
@@ -270,8 +266,3 @@ class ProductDetails:
         return result
        
     
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 321846c5e0ea38083b5d7c6b6130517d2f0f2b70
