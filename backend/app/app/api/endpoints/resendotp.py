@@ -5,7 +5,7 @@ from app.app.db.session import sessionLocal
 from app.app.Schemas.resend_otp_schema import ResendOTP
 from app.app.crud.resend_otp_crud import ResendOTPCRUD
 
-router = APIRouter()
+router = APIRouter(tags=["login"])
 
 
 @router.post("/resend_otp")

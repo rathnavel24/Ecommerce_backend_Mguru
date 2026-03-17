@@ -6,7 +6,7 @@ from app.app.Schemas.verifyotp_schema import VerifyOtp
 from app.app.crud.verifyotp_crud import VerifyOTPCRUD
 
 
-router = APIRouter()
+router = APIRouter(tags=["login"])
 
 
 

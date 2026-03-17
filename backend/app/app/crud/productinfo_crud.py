@@ -61,7 +61,11 @@ class ProductDetails:
             description = self.product_data.get("description"),
             image_url = self.product_data.get("image_url"),
             createdby = user_id,
+<<<<<<< HEAD
+            status = self.product_data.status  
+=======
             status = self.product_data.get("status")  
+>>>>>>> dev
         )
         self.db.add(new_product)
         self.db.commit()
@@ -177,6 +181,36 @@ class ProductDetails:
 
 
         return result
+<<<<<<< HEAD
+    
+    def get_product_by_productid(self,id):
+        product = self.db.query(EcommerceProductInfo)\
+            .filter(EcommerceProductInfo.product_id == id)\
+            .filter(EcommerceProductInfo.status != "deleted")\
+            .first()
+        if not product:
+            raise HTTPException(status_code=404, detail="No products found")
+        
+        product = {
+                "price": product.price,
+                "status": product.status,
+                "discount_percent": product.discount_percent,
+                "createdat": product.createdat,
+                "description": product.description,
+                "updatedat": product.updatedat,
+                "image_url": product.image_url,
+                "createdby": product.createdby,
+                "sku": product.sku,
+                "product_name": product.product_name,
+                "rating": product.rating,
+                "product_id": product.product_id,
+                "total_reviews": product.total_reviews,
+                "tag": product.tag,
+                "category_name": product.category.name
+            }
+        
+        return product
+=======
     def get_product_by_productid(self,id):
             product = self.db.query(EcommerceProductInfo)\
                 .filter(EcommerceProductInfo.product_id == id)\
@@ -261,3 +295,7 @@ class ProductDetails:
        
     
        
+<<<<<<< HEAD
+=======
+>>>>>>> dev
+>>>>>>> 5e80ca78068dd1d878ff6932f0ac1c5b63b3a153

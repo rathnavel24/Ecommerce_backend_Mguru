@@ -5,7 +5,7 @@ from app.app.Schemas.verify_forgot_otp_schema import VerifyForgotOTP
 from app.app.crud.verify_forgot_otp_crud import VerifyForgotOTPCRUD
 from app.app.api.deps import get_db
 
-router = APIRouter()
+router = APIRouter(tags=["login"])
 
 
 

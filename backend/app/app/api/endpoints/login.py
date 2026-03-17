@@ -5,8 +5,9 @@ from app.app.db.session import sessionLocal
 from app.app.crud.login_crud import LoginUser
 from app.app.Schemas.userlogin_schema import UserLogin
 
-router = APIRouter()
 
+
+router = APIRouter(tags=["login"])
 
 
 @router.post("/login")

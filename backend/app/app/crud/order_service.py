@@ -4,6 +4,7 @@ from app.app.models.ecommerce_order import EcommerceOrder
 from app.app.models.ecommerce_orderitems import EcommerceOrderItems
 from app.app.models.ecommerce_cart import EcommerceCart
 from app.app.models.ecommerce_inventory import EcommerceInventory
+from app.app.models.ecommerce_productinfo import EcommerceProductInfo
 
 
 class CheckoutService:
@@ -20,13 +21,20 @@ class CheckoutService:
         ).all()
 
         if not cart_items:
-            raise HTTPException(400, "Cart empty")
+            raise HTTPException(status_code=400, detail="Cart empty")
 
         total_price = 0
 
         for item in cart_items:
             product = item.product
-            total_price += product.price * item.quantity
+
+            discounted_price = product.price - (
+                product.price * product.discount_percent / 100
+            )
+
+            total_price += discounted_price * item.quantity
+
+    
 
         order = EcommerceOrder(
             user_id=user_id,
