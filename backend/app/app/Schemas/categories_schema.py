@@ -5,7 +5,7 @@ class CategoryCreate(BaseModel):
     name:str
     parent_id: Optional[int]= None
     status: Optional[str] = "active"
-    created_by : Optional[str]
+    image_url : Optional[str]
 
 class CategoryUpdate(BaseModel):
     name: Optional[str] = None

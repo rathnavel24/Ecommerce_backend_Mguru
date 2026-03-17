@@ -8,6 +8,10 @@ def generate_sku():
     characters = string.ascii_uppercase + string.digits
     return ''.join(random.choice(characters) for _ in range(10))
 
+def generate_rating():
+    return random.uniform(4.1, 4.9)
+def generate_reviews():
+    return random.randint(254,632)
 
 class EcommerceProductInfo(Base):
     __tablename__ = 'product_info'
@@ -20,8 +24,8 @@ class EcommerceProductInfo(Base):
     description = Column(TEXT)
     image_url = Column(TEXT)
     sku = Column(String(100), unique=True, default=generate_sku)
-    rating = Column(DECIMAL(10,2))
-    total_reviews = Column(Integer)
+    rating = Column(DECIMAL(10,2),default=generate_rating)
+    total_reviews = Column(Integer,default=generate_reviews)
     tag = Column(String(45))
     status = Column(Enum('active','inactive','deleted'))
     createdat = Column(TIMESTAMP, default=func.now())

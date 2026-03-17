@@ -5,7 +5,7 @@ from app.app.Schemas.set_new_password_schema import SetNewPassword
 from app.app.crud.set_new_password_crud import SetNewPasswordCRUD
 from app.app.api.deps import get_db
 
-router = APIRouter()
+router = APIRouter(tags=["login"])
 
 
 

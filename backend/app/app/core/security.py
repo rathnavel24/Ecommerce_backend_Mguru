@@ -1,9 +1,6 @@
-from fastapi import HTTPException
 from passlib.context import CryptContext
-from datetime import datetime as dt
 from datetime import timedelta,datetime
-from jose import ExpiredSignatureError, JWTError, jwt
-from starlette import status
+from jose import jwt
 import random
 import uuid
 
@@ -25,7 +22,7 @@ def hash_password(password):
 
 SECRET_KEY = "MqbU2rs3hlCKUWrt3ZvTeg7NxVTgTBPlJkRLWLpgoDttc8IG6I0NTzDwwzJsk"
 ALGORITHM = "HS256"
-EXPIRE_MINUTES = 60
+EXPIRE_MINUTES = 360
 
 
 def create_access_token(data: dict):
@@ -49,7 +46,6 @@ def create_access_token(data: dict):
 
 def generate_otp():
     return str(random.randint(100000,999999))
-
 
 
 def generate_otp_key():

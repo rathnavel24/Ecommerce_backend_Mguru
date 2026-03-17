@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, File, Form, UploadFile
 from sqlalchemy.orm import Session
 from app.app.Schemas.categories_schema import CategoryCreate, CategoryUpdate
 from app.app.crud.category_crud import (Category_Create,get_all_categories,
@@ -6,6 +6,7 @@ from app.app.crud.category_crud import (Category_Create,get_all_categories,
 from app.app.api.deps import get_db
 from app.app.api.deps import get_current_user
 from app.app.api.deps import role_required
+from app.app.crud.image_services import upload_image
 
 router = APIRouter(prefix="/category", tags=["Category"])
 
@@ -21,11 +22,24 @@ async def get_category(
 # CREATE CATEGORY (ADMIN ONLY)
 @router.post("/create")
 async def create_new_category(
-    data: CategoryCreate,
+    category_name: str = Form(...),
+    status: str = Form("active"),
+    image: UploadFile = File(...),
     db: Session = Depends(get_db),
     user = Depends(role_required(["admin"]))
 ):
-    return Category_Create(db, data)
+    
+    image_url = upload_image(image)
+
+    data = CategoryCreate(
+        name=category_name,
+        status=status,
+        image_url=image_url
+    )
+
+    user_id = user.get("user_id")
+
+    return Category_Create(db, data, user_id)
 
 
 # UPDATE CATEGORY (ADMIN ONLY)

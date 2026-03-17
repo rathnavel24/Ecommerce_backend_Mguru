@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, File, Form, UploadFile, HTTPException
 from sqlalchemy.orm import Session
-from app.app.Schemas.productinfo_schema import ProductCreate
+from app.app.Schemas.productinfo_schema import ProductCreate,ProductUpdate
 from app.app.crud.productinfo_crud import ProductDetails
 from app.app.api.deps import get_db
 from app.app.api.deps import get_current_user
@@ -29,7 +29,7 @@ def get_products_by_category(category_id: int, db: Session = Depends(get_db)):
 def get_products_by_category(product_id: int, db: Session = Depends(get_db)):
     return ProductDetails(db, None).get_product_by_productid(product_id)
 
-
+    
 # CREATE PRODUCT (ADMIN + MERCHANT)
 @router.post("/create_product")
 async def create_product(
@@ -62,17 +62,15 @@ async def create_product(
         raise HTTPException(status_code=500, detail=str(e))
 
 # UPDATE PRODUCT (ADMIN + MERCHANT)
-@router.put("/update/")
+@router.put("/update/{product_id}")
 async def update_product(
     product_id: int,
-    product_data: ProductCreate,
+    product_data: ProductUpdate,
     db: Session = Depends(get_db),
-    user=Depends(role_required(["admin", "merchant"]))
+    user=Depends(role_required(["admin","merchant"]))
 ):
-    try:
-        return ProductDetails(db, product_data).update_product(product_id)
-    except Exception as e:
-        raise e
+    return ProductDetails(db, product_data).update_product(product_id)
+
 
 
 # DELETE PRODUCT (ADMIN ONLY)
@@ -102,3 +100,16 @@ def prod_search(product_name:str,db:Session=Depends(get_db)):
     return product      
 
 
+@router.get("/merchant/my_products")
+async def get_my_products(
+    db: Session = Depends(get_db),
+    user = Depends(role_required(["merchant","admin"])),
+    current_user = Depends(get_current_user)
+):
+    try:
+        user_id = current_user.get("user_id")
+
+        return ProductDetails(db, None).get_merchant_products(str(user_id))
+
+    except Exception as e:
+        raise e

@@ -61,7 +61,7 @@ class ProductDetails:
             description = self.product_data.get("description"),
             image_url = self.product_data.get("image_url"),
             createdby = user_id,
-            status = self.product_data.get("status")
+            status = self.product_data.get("status")  
         )
         self.db.add(new_product)
         self.db.commit()
@@ -70,26 +70,32 @@ class ProductDetails:
             "msg" : "Product Created Successfully"
         }
     
-    def update_product(self,productt_id:int):
+    def update_product(self, product_id: int):
 
-        product = self.db.query(EcommerceProductInfo).filter(EcommerceProductInfo.product_id == productt_id).first()
+        product = self.db.query(EcommerceProductInfo)\
+            .filter(EcommerceProductInfo.product_id == product_id)\
+            .first()
 
         if not product:
             raise HTTPException(status_code=404, detail="Product not found")
-        
-        product.product_name = self.product_data.product_name
-        product.categorie_id = self.product_data.category_id
-        product.price = self.product_data.product_price
-        product.discount_percent = self.product_data.discount_per
-        product.description = self.product_data.product_description
-        product.image_url = self.product_data.image_url
-        product.status = self.product_data.status
+
+        update_data = self.product_data.dict(exclude_unset=True)
+
+        field_map = {
+            "product_price": "price",
+            "category_id": "categorie_id",
+            "product_description": "description",
+            "discount_per": "discount_percent"
+        }
+
+        for key, value in update_data.items():
+            db_field = field_map.get(key, key)
+            setattr(product, db_field, value)
 
         self.db.commit()
         self.db.refresh(product)
-        return{
-            "msg" : "Product Updated Successfully"
-        }
+
+        return {"msg": "Product Updated Successfully"}
     
     def delete_product(self,producttt_id = int):
         product = self.db.query(EcommerceProductInfo).filter(EcommerceProductInfo.product_id == producttt_id).first()
@@ -260,4 +266,3 @@ class ProductDetails:
         return result
        
     
-       

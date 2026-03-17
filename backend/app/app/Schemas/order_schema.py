@@ -23,6 +23,12 @@ class OrderResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class OrderBuyNow(BaseModel):
+    product_id : str
+    quantity : int
+    address_id : int
+
+
 
     
 
