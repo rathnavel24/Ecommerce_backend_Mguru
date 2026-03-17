@@ -12,4 +12,5 @@ python-multipart>=0.0.9
 pydantic[email]
 pymysql
 cloudinary
-python-multipartpymysql
+python-multipart
+pymysql
