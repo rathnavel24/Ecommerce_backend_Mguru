@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from app.app.models.ecommerce_productinfo import EcommerceProductInfo
 
 from sqlalchemy import func
+from app.app.Schemas.productinfo_schema import ProductUpdate
 
 
 import random
@@ -96,6 +97,8 @@ class ProductDetails:
         self.db.refresh(product)
 
         return {"msg": "Product Updated Successfully"}
+
+
     
     def delete_product(self,producttt_id = int):
         product = self.db.query(EcommerceProductInfo).filter(EcommerceProductInfo.product_id == producttt_id).first()

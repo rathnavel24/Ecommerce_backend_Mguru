@@ -61,15 +61,44 @@ async def create_product(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# UPDATE PRODUCT (ADMIN + MERCHANT)
 @router.put("/update/{product_id}")
 async def update_product(
-    product_id: int,
-    product_data: ProductUpdate,
-    db: Session = Depends(get_db),
-    user=Depends(role_required(["admin","merchant"]))
+    product_id : int,
+    product_name : int = Form(None),
+    category_id : int = Form(None),
+    product_price: Decimal = Form(None),
+    discount_per: Decimal = Form(None),
+    product_description: str = Form(None),
+    status: str = Form(None),
+    image: UploadFile = File(None),   
+    image_url: str = Form(None),   
+
+    db:Session = Depends(get_db)
 ):
-    return ProductDetails(db, product_data).update_product(product_id)
+    try:
+        if image:
+            final_image_url = upload_image(image)
+        elif image_url:
+            final_image_url = image_url
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail= "Image or image_url required"
+            )
+        
+        data = ProductUpdate(
+            product_name=product_name,
+            category_id = category_id,
+            product_price=product_price,
+            discount_per=discount_per,
+            product_description=product_description,
+            status=status,
+            image_url=final_image_url
+
+        )
+        return ProductDetails(db).update_product(product_id,data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 
