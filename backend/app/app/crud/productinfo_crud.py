@@ -71,7 +71,7 @@ class ProductDetails:
             "msg" : "Product Created Successfully"
         }
     
-    def update_product(self, product_id: int):
+    def update_product(self, product_id: int, product_data):
 
         product = self.db.query(EcommerceProductInfo)\
             .filter(EcommerceProductInfo.product_id == product_id)\
@@ -80,7 +80,8 @@ class ProductDetails:
         if not product:
             raise HTTPException(status_code=404, detail="Product not found")
 
-        update_data = self.product_data.dict(exclude_unset=True)
+        
+        update_data = product_data.dict(exclude_unset=True)
 
         field_map = {
             "product_price": "price",
@@ -97,7 +98,6 @@ class ProductDetails:
         self.db.refresh(product)
 
         return {"msg": "Product Updated Successfully"}
-
 
     
     def delete_product(self,producttt_id = int):

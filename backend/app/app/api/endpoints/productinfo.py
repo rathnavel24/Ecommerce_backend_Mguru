@@ -64,7 +64,7 @@ async def create_product(
 @router.put("/update/{product_id}")
 async def update_product(
     product_id : int,
-    product_name : int = Form(None),
+    product_name : str = Form(None),
     category_id : int = Form(None),
     product_price: Decimal = Form(None),
     discount_per: Decimal = Form(None),
@@ -96,7 +96,7 @@ async def update_product(
             image_url=final_image_url
 
         )
-        return ProductDetails(db).update_product(product_id,data)
+        return ProductDetails(db,data).update_product(product_id,data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
