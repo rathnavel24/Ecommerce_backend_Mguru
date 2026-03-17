@@ -1,7 +1,7 @@
-from fastapi import HTTPException
-from starlette import status 
+
+
 from app.app.models.ecommerce_user import Users
-from starlette import status
+
 from sqlalchemy.orm import Session
 from abc import ABC,abstractmethod
 

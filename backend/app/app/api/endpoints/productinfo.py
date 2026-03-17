@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, File, Form, UploadFile, HTTPException
 from sqlalchemy.orm import Session
-from app.app.Schemas.productinfo_schema import ProductCreate,ProductUpdate
+from app.app.Schemas.productinfo_schema import ProductUpdate
 from app.app.crud.productinfo_crud import ProductDetails
 from app.app.api.deps import get_db
 from app.app.api.deps import get_current_user

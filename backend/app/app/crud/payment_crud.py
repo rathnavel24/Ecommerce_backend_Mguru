@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from app.app.models.ecommerce_order import EcommerceOrder
+
 from app.app.models.ecommerce_payments import EcommercePayments
 import uuid
 

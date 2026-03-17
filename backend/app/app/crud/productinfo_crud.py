@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.app.models.ecommerce_productinfo import EcommerceProductInfo
-from app.app.models.ecommerce_categories import EcommerceCategories
+
 from sqlalchemy import func
 from app.app.Schemas.productinfo_schema import ProductUpdate
 
