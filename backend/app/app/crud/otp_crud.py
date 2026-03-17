@@ -1,9 +1,9 @@
-import random 
+
 import smtplib
-from app.app.models.ecommerce_userotp import EcommerceUserOtp
+
 from sqlalchemy.orm import Session
 from email.message import EmailMessage
-from datetime import datetime, timedelta
+
 def otp_sent(email,otp):
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.starttls()
