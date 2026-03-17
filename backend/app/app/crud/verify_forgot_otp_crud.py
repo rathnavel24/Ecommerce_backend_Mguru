@@ -19,7 +19,7 @@ class VerifyForgotOTPCRUD:
         if not otp_record:
             raise Exception("Invalid reset key")
 
-        if otp_record.expires_at < datetime.utcnow():
+        if otp_record.expires_at < datetime.now():
             raise Exception("OTP expired")
 
         if str(otp_record.otp) != str(self.otp):

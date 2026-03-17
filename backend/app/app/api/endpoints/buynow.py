@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter ,Depends
 from sqlalchemy.orm import Session
 from app.app.api.deps import get_db
-from app.app.api.deps import get_current_user
+
 from app.app.api.deps import role_required
 from app.app.Schemas.order_schema import OrderBuyNow
 

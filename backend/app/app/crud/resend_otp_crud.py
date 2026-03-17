@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from app.app.models.ecommerce_userotp import EcommerceUserOtp
 from app.app.models.ecommerce_user import Users
 from app.app.core.security import generate_otp
-from app.app.crud.otp_crud import otp_sent
+
 
 class ResendOTPCRUD:
 
