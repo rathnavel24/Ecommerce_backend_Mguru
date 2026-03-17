@@ -11,3 +11,5 @@ class CategoryUpdate(BaseModel):
     name: Optional[str] = None
     parent_id : Optional[int] = None
     status: Optional[str] = None
+    
+    

@@ -43,15 +43,28 @@ async def create_new_category(
 
 
 # UPDATE CATEGORY (ADMIN ONLY)
-@router.put("/update")
+@router.put("/update/{category_id}")
 def update_category_api(
-    categories_id: int,
-    data: CategoryUpdate,
-    db: Session = Depends(get_db),
-    user = Depends(role_required(["admin"]))
-):
-    return update_category(db, categories_id, data)
+    category_id: int,
 
+    name: str = Form(None),
+    parent_id: int = Form(None),
+    status: str = Form(None),
+
+    image: UploadFile = File(None),
+    image_url: str = Form(None),
+
+    db: Session = Depends(get_db),
+    user=Depends(role_required(["admin"]))
+):
+
+    data = CategoryUpdate(
+        name=name,
+        parent_id=parent_id,
+        status=status
+    )
+
+    return update_category(db, category_id, data, image, image_url)
 
 # DELETE CATEGORY (ADMIN ONLY)
 @router.delete("/delete")
