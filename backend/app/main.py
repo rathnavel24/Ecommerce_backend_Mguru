@@ -19,6 +19,7 @@ from app.app.api.endpoints import payments
 from app.app.api.endpoints import cart
 from app.app.api.endpoints import checkout
 from app.app.api.endpoints import orderitems
+from app.app.api.endpoints import buynow
 
 app = FastAPI()
 
@@ -52,3 +53,4 @@ app.include_router(payments.router)
 app.include_router(cart.router)
 app.include_router(checkout.router)
 app.include_router(orderitems.router)
+app.include_router(buynow.router)

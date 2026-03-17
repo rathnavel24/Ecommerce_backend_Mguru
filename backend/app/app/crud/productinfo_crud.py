@@ -177,6 +177,7 @@ class ProductDetails:
 
 
         return result
+    
     def get_product_by_productid(self,id):
             product = self.db.query(EcommerceProductInfo)\
                 .filter(EcommerceProductInfo.product_id == id)\
