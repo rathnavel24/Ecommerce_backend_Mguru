@@ -15,9 +15,13 @@ router = APIRouter(prefix="/products", tags=["Products"])
 
 # GET ALL PRODUCTS (PUBLIC / ANY USER)
 @router.get("/all_products")
-async def get_products(db: Session = Depends(get_db)):
+async def get_products(
+    page: int = 1,
+    page_size: int = 10,
+    db: Session = Depends(get_db)
+):
     try:
-        return ProductDetails(db, None).get_all_products()
+        return ProductDetails(db, None).get_all_products(page, page_size)
     except Exception as e:
         raise e
     

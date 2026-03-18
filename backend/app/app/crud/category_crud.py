@@ -29,7 +29,7 @@ def Category_Create(db: Session, category: CategoryCreate, user_id):
     return new_category
 
 def get_all_categories(db:Session):
-    category =db.query(EcommerceCategories).all()
+    category =db.query(EcommerceCategories).filter(EcommerceCategories.status == "active").all()
     return category
 
 
@@ -78,6 +78,7 @@ def update_category(db: Session,category_id: int,data: CategoryUpdate,image=None
     db.refresh(category)
 
     return {"msg": "Category Updated Successfully"}
+
 def delete_category(db:Session, category_id : int):
 
     category = db.query(EcommerceCategories).filter(EcommerceCategories.categories_id == category_id).first()

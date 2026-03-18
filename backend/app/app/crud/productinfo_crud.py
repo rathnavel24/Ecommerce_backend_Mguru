@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.app.models.ecommerce_productinfo import EcommerceProductInfo
-
+from app.utils import get_pagination
 from sqlalchemy import func
 from app.app.Schemas.productinfo_schema import ProductUpdate
 
@@ -14,19 +14,29 @@ class ProductDetails:
         self.db = db
         self.product_data = product_data
 
-    def get_all_products(self):
+    def get_all_products(self, page: int, page_size: int):
 
-        products = self.db.query(EcommerceProductInfo)\
-            .filter(EcommerceProductInfo.status != "deleted")\
-            .all()
+        query = self.db.query(EcommerceProductInfo).filter(
+            EcommerceProductInfo.status != "deleted"
+        )
 
-        if not products:
+        total_count = query.count()
+
+        if total_count == 0:
             raise HTTPException(status_code=404, detail="No products found")
+
+        total_pages, offset, limit = get_pagination(
+            row_count=total_count,
+            current_page_no=page,
+            default_page_size=page_size
+        )
+
+        query = query.order_by(func.rand())
+        products = query.offset(offset).limit(limit).all()
 
         result = []
 
         for product in products:
-
             product_data = {
                 "price": product.price,
                 "status": product.status,
@@ -44,12 +54,16 @@ class ProductDetails:
                 "tag": product.tag,
                 "category_name": product.category.name
             }
-
             result.append(product_data)
-        random.seed(42)
-        random.shuffle(result)
 
-        return result
+
+        return {
+            "total_count": total_count,
+            "total_pages": total_pages,
+            "current_page": page,
+            "page_size": page_size,
+            "data": result
+        }
 
 
     def create_product(self,user_id):
