@@ -40,5 +40,5 @@ class ResendOTPCRUD:
         print(new_otp)
 
         return {
-            "timer": 600
+            "timer": 300
         }
