@@ -60,11 +60,15 @@ class CheckoutService:
             inventory.stock_quantity -= item.quantity
             inventory.reserved_quantity -= item.quantity
 
+            discounted_price = item.product.price - (
+                item.product.price * item.product.discount_percent / 100
+            )
+
             order_item = EcommerceOrderItems(
                 order_id=order.order_id,
                 product_id=item.product_id,
                 product_name=item.product.product_name,
-                price=item.product.price,
+                price=discounted_price,
                 quantity=item.quantity,
                 status="active",
                 createdby="system"
