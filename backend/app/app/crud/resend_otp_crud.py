@@ -11,7 +11,7 @@ class ResendOTPCRUD:
         self.db = db
         self.reset_key = reset_key
 
-    def resend(self):
+    def resend(self,background_tasks):
 
         otp_record = self.db.query(EcommerceUserOtp).filter(
             EcommerceUserOtp.reset_key == self.reset_key,
@@ -36,7 +36,7 @@ class ResendOTPCRUD:
         otp_record.expires_at = datetime.now() + timedelta(minutes=5)
 
         self.db.commit()
-        otp_sent(email,new_otp)
+        background_tasks.add_task(otp_sent, user.email, new_otp)
         print(new_otp)
 
         return {
