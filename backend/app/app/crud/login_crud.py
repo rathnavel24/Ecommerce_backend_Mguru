@@ -42,7 +42,7 @@ class LoginUser:
             self.db.commit()
 
 
-            #otp_sent(user.email, otp)
+            otp_sent(user.email, otp)
             print(otp)
             return {
                 "timer": 600,

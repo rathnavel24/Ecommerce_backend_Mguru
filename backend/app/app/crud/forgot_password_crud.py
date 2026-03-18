@@ -27,7 +27,7 @@ class ForgotPasswordCRUD:
             user_id=user.user_id,
             otp=otp,
             reset_key=reset_key,
-            expires_at=datetime.utcnow() + timedelta(minutes=5),
+            expires_at=datetime.now() + timedelta(minutes=5),
             is_used=False,
             otp_verified=False
         )
@@ -36,7 +36,7 @@ class ForgotPasswordCRUD:
         self.db.commit()
 
         print(otp)
-        # otp_sent(user.email, otp)
+        otp_sent(user.email, otp)
 
         return {
             "message": "OTP sent successfully",
