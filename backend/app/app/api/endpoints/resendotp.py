@@ -13,6 +13,7 @@ async def resend_otp(data: ResendOTP,background_tasks: BackgroundTasks, db: Sess
 
     try:
         return ResendOTPCRUD(db, data.reset_key).resend(background_tasks)
+    
 
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
