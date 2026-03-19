@@ -31,7 +31,7 @@ class ProductDetails:
             default_page_size=page_size
         )
 
-        query = query.order_by(func.rand())
+        query = query.order_by(func.rand(42))
         products = query.offset(offset).limit(limit).all()
 
         result = []
