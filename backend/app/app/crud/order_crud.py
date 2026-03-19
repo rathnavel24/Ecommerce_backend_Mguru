@@ -51,7 +51,7 @@ class OrderDetails:
         return self.db.query(EcommerceOrder).filter(
             EcommerceOrder.user_id == user_id,
             EcommerceOrder.status == "active"
-        ).all()
+        ).order_by(EcommerceOrder.created_at.desc()).all()
 
 
     # USER - Get Single Order
