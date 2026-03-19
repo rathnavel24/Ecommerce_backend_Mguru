@@ -36,7 +36,7 @@ class ResendOTPCRUD:
         otp_record.expires_at = datetime.now() + timedelta(minutes=5)
 
         self.db.commit()
-        background_tasks.add_task(otp_sent, user.email, new_otp)
+        background_tasks.add_task(otp_sent, email, new_otp)
         print(new_otp)
 
         return {

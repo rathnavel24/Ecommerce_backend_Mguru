@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from app.app.models.ecommerce_productinfo import EcommerceProductInfo
 from app.utils import get_pagination
 from sqlalchemy import func
+from starlette import status
 from app.app.Schemas.productinfo_schema import ProductUpdate
 
 
@@ -68,6 +69,15 @@ class ProductDetails:
 
     def create_product(self,user_id):
 
+        if not self.product_data.get("product_name"):
+            raise HTTPException(status_code=status.HTTP_204_NO_CONTENT,detail="please provide name")
+        
+        old_product = self.db.query(EcommerceProductInfo).filter(
+            EcommerceProductInfo.product_name.ilike(f"%{self.product_data.get("product_name")}%")).first()
+        
+        if old_product:
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="product already exsists")
+        
         new_product = EcommerceProductInfo(
             product_name = self.product_data.get("product_name"),
             categorie_id = self.product_data.get("categorie_id"),
@@ -87,6 +97,13 @@ class ProductDetails:
     
     def update_product(self, product_id: int, product_data):
 
+        old_product = self.db.query(EcommerceProductInfo).filter(
+            EcommerceProductInfo.product_name.ilike(f"%{product_data.product_name}%")).first()
+        
+        if old_product:
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail="product already exsists")
+        
+        
         product = self.db.query(EcommerceProductInfo)\
             .filter(EcommerceProductInfo.product_id == product_id)\
             .first()
@@ -97,6 +114,7 @@ class ProductDetails:
         
         update_data = product_data.dict(exclude_unset=True)
 
+        
         field_map = {
             "product_price": "price",
             "category_id": "categorie_id",
@@ -200,6 +218,7 @@ class ProductDetails:
 
 
         return result
+    
     def get_product_by_productid(self,id):
             product = self.db.query(EcommerceProductInfo)\
                 .filter(EcommerceProductInfo.product_id == id)\

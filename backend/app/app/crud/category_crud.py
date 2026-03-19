@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from starlette import status
 from app.app.models.ecommerce_categories import EcommerceCategories
 from app.app.Schemas.categories_schema import CategoryCreate, CategoryUpdate
 from  fastapi import File, HTTPException, UploadFile
@@ -21,7 +22,12 @@ def Category_Create(db: Session, category: CategoryCreate, user_id):
         image_url=category.image_url,
         created_by=str(user_id)
     )
-
+    old_categories = db.query(EcommerceCategories).filter(
+        EcommerceCategories.name.ilike(f"%{new_category.name}%")).first()
+    
+    if old_categories:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail = "This categories already exsists")
+    
     db.add(new_category)
     db.commit()
     db.refresh(new_category)
@@ -58,6 +64,12 @@ def update_category(db: Session,category_id: int,data: CategoryUpdate,image=None
     # name update
     if data.name is not None:
         category.name = data.name
+
+    old_categories = db.query(EcommerceCategories).filter(
+        EcommerceCategories.name.ilike(f"%{data.name}%")).first()
+    
+    if old_categories:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,detail = "This categories already exsists")
 
     # parent update
     if data.parent_id is not None:

@@ -75,7 +75,6 @@ class CartDetails:
             if cart_item:
                 previous_qty = cart_item.quantity
                 cart_item.quantity = item.quantity
-                cart_item.total_price = item.quantity * product.price
             else:
                 cart_item = EcommerceCart(
                     user_id=user_id,
