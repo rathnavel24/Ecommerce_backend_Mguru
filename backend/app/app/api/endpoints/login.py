@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends,BackgroundTasks
 from sqlalchemy.orm import Session
 from app.app.api.deps import get_db
 from app.app.db.session import sessionLocal
@@ -11,6 +11,6 @@ router = APIRouter(tags=["login"])
 
 
 @router.post("/login")
-async def login(data: UserLogin, db: Session = Depends(get_db)):
+async def login(data: UserLogin,background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
 
-    return LoginUser(db, data.email, data.password).login()
+    return LoginUser(db, data.email, data.password).login(background_tasks)

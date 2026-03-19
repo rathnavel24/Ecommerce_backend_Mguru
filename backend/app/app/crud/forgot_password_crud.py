@@ -11,7 +11,7 @@ class ForgotPasswordCRUD:
         self.db = db
         self.email = email
 
-    def send_otp(self):
+    def send_otp(self,background_tasks):
 
         user = self.db.query(Users).filter(
             Users.email == self.email
@@ -27,7 +27,7 @@ class ForgotPasswordCRUD:
             user_id=user.user_id,
             otp=otp,
             reset_key=reset_key,
-            expires_at=datetime.utcnow() + timedelta(minutes=5),
+            expires_at=datetime.now() + timedelta(minutes=5),
             is_used=False,
             otp_verified=False
         )
@@ -36,9 +36,10 @@ class ForgotPasswordCRUD:
         self.db.commit()
 
         print(otp)
-        # otp_sent(user.email, otp)
+        background_tasks.add_task(otp_sent, user.email, otp)
 
         return {
             "message": "OTP sent successfully",
-            "otp_key": reset_key
+            "otp_key": reset_key,
+            "timer" : 300
         }

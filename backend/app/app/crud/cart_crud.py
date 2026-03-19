@@ -86,7 +86,7 @@ class CartDetails:
                 )
                 self.db.add(cart_item)
 
-            # adjust reserved inventory
+
             diff = item.quantity - previous_qty
 
             if inventory.stock_quantity - inventory.reserved_quantity < diff:

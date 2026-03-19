@@ -14,3 +14,4 @@ pymysql
 cloudinary
 python-multipart
 pymysql
+resend

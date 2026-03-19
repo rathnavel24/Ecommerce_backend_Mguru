@@ -13,7 +13,7 @@ class LoginUser:
         self.email = email
         self.password = password
 
-    def login(self):
+    def login(self,background_tasks):
 
         user = self.db.query(Users).filter(
             Users.email == self.email
@@ -42,10 +42,10 @@ class LoginUser:
             self.db.commit()
 
 
-            #otp_sent(user.email, otp)
+            background_tasks.add_task(otp_sent, user.email, otp)
             print(otp)
             return {
-                "timer": 600,
+                "timer": 300,
                 "otp_key": otp_key
             }
 

@@ -17,6 +17,10 @@ def create_address(db: Session, data, user_id: int):
         pincode=data.pincode,
         isdefault=data.isdefault
     )
+    if data.isdefault:
+        db.query(EcommerceUserAddress).filter(EcommerceUserAddress.user_id == user_id).update({
+            "isdefault" : False
+        })
 
     db.add(address)
     db.commit()
@@ -43,7 +47,7 @@ def get_user_by_id(db: Session, user_id: int):
     return addresses
 
 
-# UPDATE ADDRESS (PARTIAL UPDATE)
+# UPDATE ADDRESS (PARTIAL UPDATE)...
 def update_address(db: Session, address_id: int, user_id: int, data: UpdateAddress):
 
     address = db.query(EcommerceUserAddress).filter(
@@ -54,9 +58,9 @@ def update_address(db: Session, address_id: int, user_id: int, data: UpdateAddre
     if not address:
         raise HTTPException(status_code=404, detail="Address not found")
 
-    for key, value in data.dict(exclude_unset=True).items():
+    for key, value in data.model_dump(exclude_unset=True).items():
         setattr(address, key, value)
-
+    
     db.commit()
     db.refresh(address)
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException,BackgroundTasks
 from sqlalchemy.orm import Session
 
 from app.app.Schemas.forgot_password_schema import ForgotPassword
@@ -9,8 +9,8 @@ router = APIRouter(tags=["login"])
 
 
 @router.post("/forgot_password")
-async def forgot_password(data: ForgotPassword, db: Session = Depends(get_db)):
+async def forgot_password(data: ForgotPassword,background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     try:
-        return ForgotPasswordCRUD(db, data.email).send_otp()
+        return ForgotPasswordCRUD(db, data.email).send_otp(background_tasks)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

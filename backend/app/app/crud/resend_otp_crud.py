@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from app.app.models.ecommerce_userotp import EcommerceUserOtp
 from app.app.models.ecommerce_user import Users
 from app.app.core.security import generate_otp
+from app.app.crud.otp_crud import otp_sent
 
 
 class ResendOTPCRUD:
@@ -10,7 +11,7 @@ class ResendOTPCRUD:
         self.db = db
         self.reset_key = reset_key
 
-    def resend(self):
+    def resend(self,background_tasks):
 
         otp_record = self.db.query(EcommerceUserOtp).filter(
             EcommerceUserOtp.reset_key == self.reset_key,
@@ -35,9 +36,9 @@ class ResendOTPCRUD:
         otp_record.expires_at = datetime.now() + timedelta(minutes=5)
 
         self.db.commit()
-        #otp_sent(email,new_otp)
+        background_tasks.add_task(otp_sent, user.email, new_otp)
         print(new_otp)
 
         return {
-            "timer": 600
+            "timer": 300
         }
